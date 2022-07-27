@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TryingMakeAT.Models
+namespace YogurtAutoTesting.Models.Request
 {
     public class ClientRequestModel
     {
