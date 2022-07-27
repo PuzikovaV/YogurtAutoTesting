@@ -19,14 +19,14 @@ namespace YogurtAutoTesting.Tests
         public void ClientCreate_WhenClientModelIsCorrect_ShouldCreateClient()
         {
 
-            ClientRequestModel clientRequest = new ClientRequestModel()
+            /*ClientRequestModel clientRequest = new ClientRequestModel()
             {
                 FirstName = "Константин",
                 LastName = "Придуманный",
                 BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
                 Password = "thebestKostya666",
                 ConfirmPassword = "thebestKostya666",
-                Email = "kostik0@gmail.com",
+                Email = "kostik08@gmail.com",
                 Phone = "89996662233"
             };
             HttpStatusCode expectedRegCode = HttpStatusCode.Created;
@@ -40,11 +40,11 @@ namespace YogurtAutoTesting.Tests
             Assert.NotNull(actualId);
             Assert.IsTrue(actualId > 0);
 
-            int clientId = (int)actualId;
+            int clientId = (int)actualId;*/
 
             AuthRequestModel authModel = new AuthRequestModel()
             {
-                Email = "kostik@gmail.com",
+                Email = "kostik0@gmail.com",
                 Password = "thebestKostya666",
             };
             HttpStatusCode expectedAuthCode = HttpStatusCode.OK;
@@ -60,22 +60,21 @@ namespace YogurtAutoTesting.Tests
 
             ClientResponseModel expectedClient = new ClientResponseModel()
             {
-                Id = clientId,
-                FirstName = clientRequest.FirstName,
-                LastName = clientRequest.LastName,
-                BirthDate = clientRequest.BirthDate,
-                Email = clientRequest.Email,
-                Phone = clientRequest.Phone,
-                RegistrationDate = new DateTime()
+                Id = 41,
+                FirstName = "Константин",
+                LastName = "Придуманный",
+                RegistrationDate = new DateTime(),
+                Email = "kostik0@gmail.com",
+                Phone = "89996662233",
+                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00)
             };
 
-            HttpContent content = _clientsClient.GetClientById(clientId, token, HttpStatusCode.OK);
-            ClientResponseModel actualClient = JsonSerializer.Deserialize<ClientResponseModel>(content.ReadAsStringAsync().Result);
+            HttpContent content = _clientsClient.GetClientById(41, token, HttpStatusCode.OK);
+            string notJson = content.ReadAsStringAsync().Result;
+            ClientResponseModel actualClient = JsonSerializer.Deserialize<ClientResponseModel>(notJson);
 
             Assert.AreEqual(expectedClient, actualClient);
         }
-
-
 
     }
 }
