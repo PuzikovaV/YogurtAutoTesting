@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace YogurtAutoTesting
 {
-    internal class Urls
+    public class Urls
     {
+        public const string Host = $"https://piter-education.ru:10020";
+
+        public const string Auth = $"{Host}/Auth";
+        public const string Clients = $"{Host}/Clients";
+
+
+
     }
 }
