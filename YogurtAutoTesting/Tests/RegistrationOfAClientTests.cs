@@ -76,5 +76,68 @@ namespace YogurtAutoTesting.Tests
             Assert.AreEqual(expectedClient, actualClient);
         }
 
+        [Test]
+        public void CreateClient_WhenPasswordLessThenFourSymbols_ShouldNotRegistrate()
+        {
+            ClientRequestModel clientRequest = new ClientRequestModel()
+            {
+                FirstName = "Константин",
+                LastName = "Придуманный",
+                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
+                Password = "the8",
+                ConfirmPassword = "the8",
+                Email = "kostik888@gmail.com",
+                Phone = "89996662233"
+            };
+            HttpStatusCode expectedRegCode = HttpStatusCode.UnprocessableEntity;
+
+            HttpResponseMessage response = _clientsClient.RegisterClient(clientRequest);
+            HttpStatusCode actualRegCode = response.StatusCode;
+
+            Assert.AreEqual(expectedRegCode, actualRegCode);
+        }
+
+        [Test]
+        public void CreateClient_WhenPasswordLessThenSevenSymbols_ShouldNotRegistrate()
+        {
+            ClientRequestModel clientRequest = new ClientRequestModel()
+            {
+                FirstName = "Константин",
+                LastName = "Придуманный",
+                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
+                Password = "1234567",
+                ConfirmPassword = "1234567",
+                Email = "kostik888@gmail.com",
+                Phone = "89996662233"
+            };
+            HttpStatusCode expectedRegCode = HttpStatusCode.UnprocessableEntity;
+
+            HttpResponseMessage response = _clientsClient.RegisterClient(clientRequest);
+            HttpStatusCode actualRegCode = response.StatusCode;
+
+            Assert.AreEqual(expectedRegCode, actualRegCode);
+        }
+
+        [Test]
+        public void CreateClient_WhenEnterExistsEmail_ShouldNotRegistrate()
+        {
+            ClientRequestModel clientRequest = new ClientRequestModel()
+            {
+                FirstName = "Константин",
+                LastName = "Придуманный",
+                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
+                Password = "12345678",
+                ConfirmPassword = "12345678",
+                Email = "kostik@gmail.com",
+                Phone = "89996662233"
+            };
+            HttpStatusCode expectedRegCode = HttpStatusCode.UnprocessableEntity;
+
+            HttpResponseMessage response = _clientsClient.RegisterClient(clientRequest);
+            HttpStatusCode actualRegCode = response.StatusCode;
+
+            Assert.AreEqual(expectedRegCode, actualRegCode);
+        }
+
     }
 }
