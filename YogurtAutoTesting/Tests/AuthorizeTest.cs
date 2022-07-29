@@ -6,12 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using YogurtAutoTesting.HttpClients;
 using YogurtAutoTesting.Models.Request;
+using YogurtAutoTesting.Tests.Scenarios;
+using YogurtAutoTesting.Tests.StepDefinitions;
 
 namespace YogurtAutoTesting.Tests
 {
     public class AuthorizeTest
     {
-        private AuthClient _authClient = new AuthClient();
         [Test]
         public void UserAuthorize_WhenAccountDoesNotExist_ShouldNotLogIn()
         {
@@ -20,12 +21,8 @@ namespace YogurtAutoTesting.Tests
                 Email = "sonyaSanchez@rambler.ru",
                 Password = "sonsan123456"
             };
-            HttpStatusCode excpectedCode = HttpStatusCode.NotFound;
-
-            HttpResponseMessage authResponse = _authClient.Authorize(authModel);
-            HttpStatusCode actualCode = authResponse.StatusCode;
-
-            Assert.AreEqual(excpectedCode,actualCode);
+            AuthorizationStep authorize = new AuthorizationStep();
+            authorize.Authorize(authModel, HttpStatusCode.NotFound);
         }
 
         [Test]
@@ -36,12 +33,9 @@ namespace YogurtAutoTesting.Tests
                 Email = "kostik00@gmail.com",
                 Password = "sonsan123456"
             };
-            HttpStatusCode excpectedCode = HttpStatusCode.NotFound;
+            AuthorizationStep authorize = new AuthorizationStep();
+            authorize.Authorize(authModel, HttpStatusCode.NotFound);
 
-            HttpResponseMessage authResponse = _authClient.Authorize(authModel);
-            HttpStatusCode actualCode = authResponse.StatusCode;
-
-            Assert.AreEqual(excpectedCode, actualCode);
         }
     }
 }

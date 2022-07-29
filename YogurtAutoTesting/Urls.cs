@@ -12,7 +12,7 @@ namespace YogurtAutoTesting
 
         public const string Auth = $"{Host}/Auth";
         public const string Clients = $"{Host}/Clients";
-        public const string CleaningObjects = $"{Host}/cleaning_objects";
+        public const string CleaningObjects = $"{Host}/cleaning-objects";
 
 
 
