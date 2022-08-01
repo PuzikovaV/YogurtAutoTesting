@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,25 +9,25 @@ namespace YogurtAutoTesting.Models.Response
 {
     public class ClientResponseModel
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        [JsonProperty("firstName")]
+        [JsonPropertyName("firstName")]
         public string FirstName { get; set; }
 
-        [JsonProperty("lastName")]
+        [JsonPropertyName("lastName")]
         public string LastName { get; set; }
 
-        [JsonProperty("registrationDate")]
+        [JsonPropertyName("registrationDate")]
         public DateTime RegistrationDate { get; set; }
 
-        [JsonProperty("email")]
+        [JsonPropertyName("email")]
         public string Email { get; set; }
 
-        [JsonProperty("phone")]
+        [JsonPropertyName("phone")]
         public string Phone { get; set; }
 
-        [JsonProperty("birthDate")]
+        [JsonPropertyName("birthDate")]
         public DateTime BirthDate { get; set; }
         public override bool Equals(object? obj)
         {

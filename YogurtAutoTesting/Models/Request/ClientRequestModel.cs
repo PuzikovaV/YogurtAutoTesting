@@ -1,33 +1,29 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace YogurtAutoTesting.Models.Request
 {
     public class ClientRequestModel
     {
-        [JsonProperty("firstName")]
+        [JsonPropertyName("firstName")]
         public string FirstName { get; set; }
 
-        [JsonProperty("lastName")]
+        [JsonPropertyName("lastName")]
         public string LastName { get; set; }
 
-        [JsonProperty("birthDate")]
+        [JsonPropertyName("birthDate")]
         public DateTime BirthDate { get; set; }
 
-        [JsonProperty("password")]
+        [JsonPropertyName("password")]
         public string Password { get; set; }
 
-        [JsonProperty("confirmPassword")]
+        [JsonPropertyName("confirmPassword")]
         public string ConfirmPassword { get; set; }
 
-        [JsonProperty("email")]
+        [JsonPropertyName("email")]
         public string Email { get; set; }
 
-        [JsonProperty("phone")]
+        [JsonPropertyName("phone")]
         public string Phone { get; set; }
     }
 }

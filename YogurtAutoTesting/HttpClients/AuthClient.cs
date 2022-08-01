@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using YogurtAutoTesting.Models.Request;
 
 namespace YogurtAutoTesting.HttpClients
 {
     public class AuthClient
     {
-        public HttpResponseMessage Authorize(AuthRequestModel model)
+        public HttpContent Authorize(AuthRequestModel model, HttpStatusCode expectedCode)
         {
             string json = JsonSerializer.Serialize(model);
             HttpClient client = new HttpClient();
@@ -20,7 +17,13 @@ namespace YogurtAutoTesting.HttpClients
                 RequestUri = new Uri(Urls.Auth),
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
-            return client.Send(message);
+
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actualCode = response.StatusCode;
+
+            Assert.AreEqual(expectedCode, actualCode);
+
+            return response.Content;
         }
     }
 }

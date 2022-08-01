@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace YogurtAutoTesting
+﻿namespace YogurtAutoTesting
 {
     public class Urls
     {
@@ -12,8 +6,10 @@ namespace YogurtAutoTesting
 
         public const string Auth = $"{Host}/Auth";
         public const string Clients = $"{Host}/Clients";
-
-
-
+        public const string CleaningObjects = $"{Host}/cleaning-objects";
+        public const string Bundles = $"{Host}/Bundles";
+        public const string Cleaners = $"{Host}/Cleaners";
+        public const string Comments = $"{Host}/Comments";
+        public const string Orders = $"{Host}/Orders";
     }
 }
