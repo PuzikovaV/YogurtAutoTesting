@@ -1,33 +1,28 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace YogurtAutoTesting.Models.Request
 {
     public class CleaningObjectRequestModel
     {
-        [JsonProperty("numberOfRooms")]
+        [JsonPropertyName("numberOfRooms")]
         public int NumberOfRooms { get; set; }
 
-        [JsonProperty("numberOfBathrooms")]
+        [JsonPropertyName("numberOfBathrooms")]
         public int NumberOfBathrooms { get; set; }
 
-        [JsonProperty("square")]
+        [JsonPropertyName("square")]
         public int Square { get; set; }
 
-        [JsonProperty("numberOfWindows")]
+        [JsonPropertyName("numberOfWindows")]
         public int NumberOfWindows { get; set; }
 
-        [JsonProperty("numberOfBalconies")]
+        [JsonPropertyName("numberOfBalconies")]
         public int NumberOfBalconies { get; set; }
 
-        [JsonProperty("address")]
+        [JsonPropertyName("address")]
         public string Address { get; set; }
 
-        [JsonProperty("clientId")]
+        [JsonPropertyName("clientId")]
         public int ClientId { get; set; }
     }
 }

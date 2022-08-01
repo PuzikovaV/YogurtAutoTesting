@@ -8,7 +8,7 @@ namespace YogurtAutoTesting.HttpClients
 {
     public class ClientsClient
     {
-        public HttpResponseMessage RegisterClient(ClientRequestModel model)
+        public HttpContent RegisterClient(ClientRequestModel model, HttpStatusCode expectedCode)
         {
             string json = JsonSerializer.Serialize(model);
 
@@ -19,9 +19,14 @@ namespace YogurtAutoTesting.HttpClients
                 RequestUri = new Uri(Urls.Clients),
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
-            return client.Send(message);
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actualCode = response.StatusCode;
+
+            Assert.AreEqual(expectedCode, actualCode);
+
+            return response.Content;
         }
-        public HttpStatusCode DeleteClient(int id, string token)
+        public void DeleteClient(int id, string token, HttpStatusCode expectedCode)
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -31,9 +36,9 @@ namespace YogurtAutoTesting.HttpClients
                 RequestUri = new Uri($"{Urls.Clients}/{id}")
             };
             HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actualCode = response.StatusCode;
 
-            return response.StatusCode;
-            
+            Assert.AreEqual(expectedCode, actualCode);
         }
         public HttpContent GetClientById(int id, string token, HttpStatusCode expectedCode)
         {

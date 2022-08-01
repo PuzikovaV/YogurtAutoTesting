@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 using YogurtAutoTesting.HttpClients;
 using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
+using YogurtAutoTesting.Tests.StepDefinitions;
 
 namespace YogurtAutoTesting.Tests
 {
     public class RegistrationOfAClient
     {
-        private ClientsClient _clientsClient = new ClientsClient();
-        private AuthClient _authClient = new AuthClient();
+        private AuthorizationSteps _authorizationSteps = new AuthorizationSteps();
+
         [Test]
         public void ClientCreate_WhenClientModelIsCorrect_ShouldCreateClient()
         {
 
-            /*ClientRequestModel clientRequest = new ClientRequestModel()
+            ClientRequestModel clientRequest = new ClientRequestModel()
             {
                 FirstName = "Константин",
                 LastName = "Придуманный",
@@ -29,49 +25,30 @@ namespace YogurtAutoTesting.Tests
                 Email = "kostik08@gmail.com",
                 Phone = "89996662233"
             };
-            HttpStatusCode expectedRegCode = HttpStatusCode.Created;
 
-            HttpResponseMessage response = _clientsClient.RegisterClient(clientRequest);
-            HttpStatusCode actualRegCode = response.StatusCode;
-            string id = response.Content.ReadAsStringAsync().Result;
-            int? actualId = Convert.ToInt32(id);
-
-            Assert.AreEqual(expectedRegCode, actualRegCode);
-            Assert.NotNull(actualId);
-            Assert.IsTrue(actualId > 0);
-
-            int clientId = (int)actualId;*/
+            int id = _authorizationSteps.RegisterClient(clientRequest);
 
             AuthRequestModel authModel = new AuthRequestModel()
             {
-                Email = "kostik0@gmail.com",
-                Password = "thebestKostya666",
+                Email = clientRequest.Email,
+                Password = clientRequest.Password,
             };
-            HttpStatusCode expectedAuthCode = HttpStatusCode.OK;
 
-            HttpResponseMessage authResponse = _authClient.Authorize(authModel);
-            HttpStatusCode actualAuthCode = authResponse.StatusCode;
-            string actualToken = authResponse.Content.ReadAsStringAsync().Result;
-
-            Assert.AreEqual(expectedAuthCode, actualAuthCode);
-            Assert.NotNull(actualToken);
-
-            string token = actualToken;
+            string token = _authorizationSteps.Authorize(authModel);
 
             ClientResponseModel expectedClient = new ClientResponseModel()
             {
-                Id = 41,
-                FirstName = "Константин",
-                LastName = "Придуманный",
+                Id = id,
+                FirstName = clientRequest.FirstName,
+                LastName = clientRequest.LastName,
                 RegistrationDate = new DateTime(),
-                Email = "kostik0@gmail.com",
-                Phone = "89996662233",
-                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00)
+                Email = clientRequest.Email,
+                Phone = clientRequest.Phone,
+                BirthDate = clientRequest.BirthDate
             };
 
-            HttpContent content = _clientsClient.GetClientById(41, token, HttpStatusCode.OK);
-            string notJson = content.ReadAsStringAsync().Result;
-            ClientResponseModel actualClient = JsonSerializer.Deserialize<ClientResponseModel>(notJson);
+            HttpContent content = _clientsClient.GetClientById(id, token, HttpStatusCode.OK);
+            ClientResponseModel actualClient = JsonSerializer.Deserialize<ClientResponseModel>(content.ReadAsStringAsync().Result);
 
             Assert.AreEqual(expectedClient, actualClient);
         }
@@ -89,12 +66,7 @@ namespace YogurtAutoTesting.Tests
                 Email = "kostik888@gmail.com",
                 Phone = "89996662233"
             };
-            HttpStatusCode expectedRegCode = HttpStatusCode.UnprocessableEntity;
-
-            HttpResponseMessage response = _clientsClient.RegisterClient(clientRequest);
-            HttpStatusCode actualRegCode = response.StatusCode;
-
-            Assert.AreEqual(expectedRegCode, actualRegCode);
+            HttpContent response = _clientsClient.RegisterClient(clientRequest, HttpStatusCode.UnprocessableEntity);
         }
 
         [Test]
@@ -110,12 +82,7 @@ namespace YogurtAutoTesting.Tests
                 Email = "kostik888@gmail.com",
                 Phone = "89996662233"
             };
-            HttpStatusCode expectedRegCode = HttpStatusCode.UnprocessableEntity;
-
-            HttpResponseMessage response = _clientsClient.RegisterClient(clientRequest);
-            HttpStatusCode actualRegCode = response.StatusCode;
-
-            Assert.AreEqual(expectedRegCode, actualRegCode);
+            HttpContent response = _clientsClient.RegisterClient(clientRequest, HttpStatusCode.UnprocessableEntity);
         }
 
         [Test]
@@ -131,12 +98,7 @@ namespace YogurtAutoTesting.Tests
                 Email = "kostik@gmail.com",
                 Phone = "89996662233"
             };
-            HttpStatusCode expectedRegCode = HttpStatusCode.UnprocessableEntity;
-
-            HttpResponseMessage response = _clientsClient.RegisterClient(clientRequest);
-            HttpStatusCode actualRegCode = response.StatusCode;
-
-            Assert.AreEqual(expectedRegCode, actualRegCode);
+            HttpContent response = _clientsClient.RegisterClient(clientRequest, HttpStatusCode.UnprocessableEntity);
         }
 
     }

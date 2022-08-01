@@ -1,36 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using YogurtAutoTesting.HttpClients;
-using YogurtAutoTesting.Models.Request;
+﻿using YogurtAutoTesting.Models.Request;
+using YogurtAutoTesting.Models.Response;
+using YogurtAutoTesting.Tests.StepDefinitions;
 
 namespace YogurtAutoTesting.Tests
 {
     public class CreateCleaningObjectTest
     {
-        private CleaningObjectClient _cleaningObject = new CleaningObjectClient();
-        private AuthClient _authClient = new AuthClient();
+        AuthorizationSteps _authorizationSteps = new AuthorizationSteps();
+        CleaningObjectSteps _cleaningObjectSteps = new CleaningObjectSteps();
+
         [Test]
         public void CreateCleaningObject_WhenModelIsCorrect_ShouldCreateObject()
         {
+            ClientRequestModel clientRequest = new ClientRequestModel()
+            {
+                FirstName = "Константин",
+                LastName = "Придуманный",
+                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
+                Password = "thebestKostya666",
+                ConfirmPassword = "thebestKostya666",
+                Email = "kostik08@gmail.com",
+                Phone = "89996662233"
+            };
+
+            int id = _authorizationSteps.RegisterClient(clientRequest);
+
             AuthRequestModel authModel = new AuthRequestModel()
             {
-                Email = "kostik0@gmail.com",
-                Password = "thebestKostya666",
+                Email = clientRequest.Email,
+                Password = clientRequest.Password,
             };
-            HttpStatusCode expectedAuthCode = HttpStatusCode.OK;
 
-            HttpResponseMessage authResponse = _authClient.Authorize(authModel);
-            HttpStatusCode actualAuthCode = authResponse.StatusCode;
-            string actualToken = authResponse.Content.ReadAsStringAsync().Result;
-
-            Assert.AreEqual(expectedAuthCode, actualAuthCode);
-            Assert.NotNull(actualToken);
-
-            string token = actualToken;
+            string token = _authorizationSteps.Authorize(authModel);
 
             CleaningObjectRequestModel cleaningObjectRequest = new CleaningObjectRequestModel()
             {
@@ -40,14 +41,28 @@ namespace YogurtAutoTesting.Tests
                 NumberOfWindows = 6,
                 NumberOfBalconies = 2,
                 Address = "ул. Ленина д. 48, кв. 3",
-                ClientId = 41
+                ClientId = id
             };
 
-            string id = _cleaningObject.CreateACleaningObject(cleaningObjectRequest, HttpStatusCode.Created, token).ReadAsStringAsync().Result;
-            int? actualObjectId = Convert.ToInt32(id);
+            int cleaningObjectId = _cleaningObjectSteps.AddCleaningObjectTest(cleaningObjectRequest, token);
 
-            Assert.NotNull(actualObjectId);
-            Assert.IsTrue(actualObjectId>0);
+            CleaningObjectResponseModel expectedCleaningObjectResponseModel = new CleaningObjectResponseModel()
+            {
+                Id = cleaningObjectId,
+                NumberOfRooms = cleaningObjectRequest.NumberOfRooms,
+                NumberOfBathrooms = cleaningObjectRequest.NumberOfBathrooms,
+                Square = cleaningObjectRequest.Square,
+                NumberOfWindows = cleaningObjectRequest.NumberOfWindows,
+                NumberOfBalconies = cleaningObjectRequest.NumberOfBalconies,
+                Address = cleaningObjectRequest.Address,
+                ClientId = cleaningObjectRequest.ClientId,
+            };
+
+            List<CleaningObjectResponseModel> expectedCleaningObjectResponseModelList = new List<CleaningObjectResponseModel>
+            {
+                expectedCleaningObjectResponseModel,
+            };
+            _cleaningObjectSteps.GetAllCleaningObjectsByClientIdTest(cleaningObjectId, token, expectedCleaningObjectResponseModelList);
         }
     }
 }
