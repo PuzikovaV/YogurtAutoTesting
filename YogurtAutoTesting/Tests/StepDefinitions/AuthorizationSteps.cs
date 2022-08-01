@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using YogurtAutoTesting.HttpClients;
 using YogurtAutoTesting.Models.Request;
-.
 
 namespace YogurtAutoTesting.Tests.StepDefinitions
 {
@@ -27,6 +26,11 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             Assert.IsTrue(id>0);
 
             return id;
+        }
+
+        public void CantRegisterClientTest(ClientRequestModel model)
+        {
+            _clientsClient.RegisterClient(model, HttpStatusCode.UnprocessableEntity);
         }
 
         

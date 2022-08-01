@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Text.Json;
-using YogurtAutoTesting.HttpClients;
-using YogurtAutoTesting.Models.Request;
+﻿using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Tests.StepDefinitions;
 
@@ -9,7 +6,13 @@ namespace YogurtAutoTesting.Tests
 {
     public class RegistrationOfAClient
     {
-        private AuthorizationSteps _authorizationSteps = new AuthorizationSteps();
+        private AuthorizationSteps _authorizationSteps;
+        private ClientsSteps _clientsSteps;
+        public RegistrationOfAClient()
+        {
+            _authorizationSteps = new AuthorizationSteps();
+            _clientsSteps = new ClientsSteps();
+        }
 
         [Test]
         public void ClientCreate_WhenClientModelIsCorrect_ShouldCreateClient()
@@ -47,10 +50,14 @@ namespace YogurtAutoTesting.Tests
                 BirthDate = clientRequest.BirthDate
             };
 
-            HttpContent content = _clientsClient.GetClientById(id, token, HttpStatusCode.OK);
-            ClientResponseModel actualClient = JsonSerializer.Deserialize<ClientResponseModel>(content.ReadAsStringAsync().Result);
+            _clientsSteps.GetClientByIdTest(id, token, expectedClient);
 
-            Assert.AreEqual(expectedClient, actualClient);
+            List<ClientResponseModel> expectedClientModels = new List<ClientResponseModel>()
+            {
+                expectedClient
+            };
+
+            _clientsSteps.GetClientsByClientIdByAdminTest(id, token, expectedClientModels);  
         }
 
         [Test]
@@ -66,7 +73,7 @@ namespace YogurtAutoTesting.Tests
                 Email = "kostik888@gmail.com",
                 Phone = "89996662233"
             };
-            HttpContent response = _clientsClient.RegisterClient(clientRequest, HttpStatusCode.UnprocessableEntity);
+            _authorizationSteps.CantRegisterClientTest(clientRequest);
         }
 
         [Test]
@@ -82,7 +89,7 @@ namespace YogurtAutoTesting.Tests
                 Email = "kostik888@gmail.com",
                 Phone = "89996662233"
             };
-            HttpContent response = _clientsClient.RegisterClient(clientRequest, HttpStatusCode.UnprocessableEntity);
+            _authorizationSteps.CantRegisterClientTest(clientRequest);
         }
 
         [Test]
@@ -98,7 +105,7 @@ namespace YogurtAutoTesting.Tests
                 Email = "kostik@gmail.com",
                 Phone = "89996662233"
             };
-            HttpContent response = _clientsClient.RegisterClient(clientRequest, HttpStatusCode.UnprocessableEntity);
+            _authorizationSteps.CantRegisterClientTest(clientRequest);
         }
 
     }

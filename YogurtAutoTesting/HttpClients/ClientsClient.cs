@@ -26,20 +26,7 @@ namespace YogurtAutoTesting.HttpClients
 
             return response.Content;
         }
-        public void DeleteClient(int id, string token, HttpStatusCode expectedCode)
-        {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            HttpRequestMessage message = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri($"{Urls.Clients}/{id}")
-            };
-            HttpResponseMessage response = client.Send(message);
-            HttpStatusCode actualCode = response.StatusCode;
-
-            Assert.AreEqual(expectedCode, actualCode);
-        }
+        
         public HttpContent GetClientById(int id, string token, HttpStatusCode expectedCode)
         {
             HttpClient client = new HttpClient();
@@ -55,6 +42,21 @@ namespace YogurtAutoTesting.HttpClients
             Assert.AreEqual(expectedCode, actualCode);
 
             return response.Content;
+        }
+
+        public void DeleteClient(int id, string token, HttpStatusCode expectedCode)
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"{Urls.Clients}/{id}")
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actualCode = response.StatusCode;
+
+            Assert.AreEqual(expectedCode, actualCode);
         }
     }
 }

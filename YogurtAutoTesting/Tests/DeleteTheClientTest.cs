@@ -1,38 +1,37 @@
-﻿using System.Net;
-using YogurtAutoTesting.HttpClients;
-using YogurtAutoTesting.Models.Request;
+﻿using YogurtAutoTesting.Models.Request;
+using YogurtAutoTesting.Tests.StepDefinitions;
 
 namespace YogurtAutoTesting.Tests
 {
     public class DeleteTheClientTest
     {
-        private AuthClient _authClient = new AuthClient();
-        private ClientsClient _clientsClient = new ClientsClient();
+        private AuthorizationSteps _authorizationSteps = new AuthorizationSteps();
+        private ClientsSteps _clientsSteps = new ClientsSteps();
+
         [Test]
         public void ClientIsDeleted_WhenIdIsCorrect_ShouldDeleteTheClient()
         {
+            ClientRequestModel clientRequest = new ClientRequestModel()
+            {
+                FirstName = "Константин",
+                LastName = "Придуманный",
+                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
+                Password = "thebestKostya666",
+                ConfirmPassword = "thebestKostya666",
+                Email = "kostik08@gmail.com",
+                Phone = "89996662233"
+            };
+
+            int clientId = _authorizationSteps.RegisterClient(clientRequest);
+
             AuthRequestModel authModel = new AuthRequestModel()
             {
                 Email = "Admin@gmail.com",
                 Password = "qwerty12345",
             };
-            HttpStatusCode expectedAuthCode = HttpStatusCode.OK;
+            string token = _authorizationSteps.Authorize(authModel);
 
-            HttpResponseMessage authResponse = _authClient.Authorize(authModel);
-            HttpStatusCode actualAuthCode = authResponse.StatusCode;
-            string actualToken = authResponse.Content.ReadAsStringAsync().Result;
-
-            Assert.AreEqual(expectedAuthCode, actualAuthCode);
-            Assert.NotNull(actualToken);
-
-            string token = actualToken;
-
-            int clientId = 37;
-
-            HttpStatusCode expectedCode = HttpStatusCode.NoContent;
-            HttpStatusCode actualCode = _clientsClient.DeleteClient(clientId, token);
-
-            Assert.AreEqual(expectedCode, actualCode);
+            _clientsSteps.DeleteClientByAdminTest(clientId, token);
         }
 
     }
