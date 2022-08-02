@@ -59,7 +59,7 @@ namespace YogurtAutoTesting.HttpClients
             Assert.AreEqual(expectedCode, actualCode);
         }
 
-        public void UpdateClient(ClientRequestModel model, int id, string token, HttpStatusCode expected)
+        public void UpdateClient(UpdateClientRequestModel model, int id, string token, HttpStatusCode expected)
         {
             string json = JsonSerializer.Serialize(model);
             HttpClient client = new HttpClient();
