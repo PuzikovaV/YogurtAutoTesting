@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using YogurtAutoTesting.HttpClients;
+using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
 
 namespace YogurtAutoTesting.Tests.StepDefinitions
@@ -40,6 +41,11 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
         public void DeleteClientByAdminTest(int id, string token)
         {
             _clientsClient.DeleteClient(id, token, HttpStatusCode.NoContent);
+        }
+
+        public void UpdateClientById(int id, string token, ClientRequestModel model)
+        {
+            _clientsClient.UpdateClient(model, id, token, HttpStatusCode.NoContent);
         }
     }
 }

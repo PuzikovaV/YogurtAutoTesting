@@ -58,5 +58,24 @@ namespace YogurtAutoTesting.HttpClients
 
             Assert.AreEqual(expectedCode, actualCode);
         }
+
+        public void UpdateClient(ClientRequestModel model, int id, string token, HttpStatusCode expected)
+        {
+            string json = JsonSerializer.Serialize(model);
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Put,
+                RequestUri = new Uri($"{Urls.Clients}/{id}"),
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            };
+
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+
+            Assert.AreEqual(expected, actual);
+
+        }
     }
 }
