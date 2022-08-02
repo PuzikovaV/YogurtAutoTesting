@@ -1,4 +1,5 @@
-﻿using YogurtAutoTesting.Models.Request;
+﻿using System;
+using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Tests.StepDefinitions;
 
@@ -39,25 +40,20 @@ namespace YogurtAutoTesting.Tests
 
             string token = _authorizationSteps.Authorize(authModel);
 
+            DateTime regTime = _clientsSteps.GetRegisterDate(id, token);
+
             ClientResponseModel expectedClient = new ClientResponseModel()
             {
                 Id = id,
                 FirstName = clientRequest.FirstName,
                 LastName = clientRequest.LastName,
-                RegistrationDate = new DateTime(),
+                RegistrationDate = regTime,
                 Email = clientRequest.Email,
                 Phone = clientRequest.Phone,
                 BirthDate = clientRequest.BirthDate
             };
 
             _clientsSteps.GetClientByIdTest(id, token, expectedClient);
-
-            List<ClientResponseModel> expectedClientModels = new List<ClientResponseModel>()
-            {
-                expectedClient
-            };
-
-            _clientsSteps.GetClientsByClientIdByAdminTest(id, token, expectedClientModels);  
         }
 
         [Test]
