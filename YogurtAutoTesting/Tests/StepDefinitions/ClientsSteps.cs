@@ -26,6 +26,15 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             return actual;
         }
 
+        public DateTime GetRegisterDate(int id, string token)
+        {
+            HttpContent httpContent = _clientsClient.GetClientById(id, token, HttpStatusCode.OK);
+            ClientResponseModel content = JsonSerializer.Deserialize<ClientResponseModel>(httpContent.ReadAsStringAsync().Result);
+            DateTime registerTime = content.RegistrationDate;
+
+            return registerTime;
+        }
+
         public List<ClientResponseModel> GetClientsByClientIdByAdminTest(int id, string token, List<ClientResponseModel> expected)
         {
             HttpContent httpContent = _clientsClient.GetClientById(id, token, HttpStatusCode.OK);
@@ -43,7 +52,7 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             _clientsClient.DeleteClient(id, token, HttpStatusCode.NoContent);
         }
 
-        public void UpdateClientById(int id, string token, ClientRequestModel model)
+        public void UpdateClientById(int id, string token, UpdateClientRequestModel model)
         {
             _clientsClient.UpdateClient(model, id, token, HttpStatusCode.NoContent);
         }
