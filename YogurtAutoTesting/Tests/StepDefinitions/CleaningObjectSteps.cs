@@ -17,7 +17,7 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
 
         public int AddCleaningObjectTest(CleaningObjectRequestModel model, string token)
         {
-            HttpContent httpContenet = _cleaningObjectClient.CreateACleaningObject(model, HttpStatusCode.OK, token);
+            HttpContent httpContenet = _cleaningObjectClient.CreateACleaningObject(model, HttpStatusCode.Created, token);
             string content = httpContenet.ReadAsStringAsync().Result;
 
             Assert.NotNull(content);

@@ -5,6 +5,12 @@ namespace YogurtAutoTesting.Tests
 {
     public class AuthorizeTest
     {
+        private AuthorizationSteps _authorizationSteps;
+        public AuthorizeTest()
+        {
+            _authorizationSteps = new AuthorizationSteps();
+        }
+
         [Test]
         public void UserAuthorize_WhenAccountDoesNotExist_ShouldNotLogIn()
         {
@@ -13,8 +19,7 @@ namespace YogurtAutoTesting.Tests
                 Email = "sonyaSanchez@rambler.ru",
                 Password = "sonsan123456"
             };
-            AuthorizationSteps authorize = new AuthorizationSteps();
-            authorize.Authorize(authModel);
+            _authorizationSteps.DoNotAuthorizeTest(authModel);
         }
 
         [Test]
@@ -25,8 +30,7 @@ namespace YogurtAutoTesting.Tests
                 Email = "kostik00@gmail.com",
                 Password = "sonsan123456"
             };
-            AuthorizationSteps authorize = new AuthorizationSteps();
-            authorize.Authorize(authModel);
+            _authorizationSteps.DoNotAuthorizeTest(authModel);
 
         }
     }

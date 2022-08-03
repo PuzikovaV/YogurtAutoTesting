@@ -33,6 +33,11 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             _clientsClient.RegisterClient(model, HttpStatusCode.UnprocessableEntity);
         }
 
-        
+        public void DoNotAuthorizeTest(AuthRequestModel model)
+        {
+            _authClient.DoNotAuthorize(model, HttpStatusCode.NotFound);
+        }
+
+
     }
 }

@@ -1,17 +1,17 @@
 ﻿using System.Data.SqlClient;
 
-namespace YogurtAutoTesting.Tests.Support
+namespace YogurtAutoTesting.Support
 {
-    public class Hooks
+    public class BaseClearCommand
     {
-        public void AfterScenario()
+        public void ClearBase()
         {
-            string connectionString = @"Data Source = 80.78.240.16; Catalog = YogurtCleaning.DB; Persist Security Info = True; User ID = student; Password = qwe!23;";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(ConnectionString.connectionString))
             {
                 connection.Open();
 
                 SqlCommand command = new SqlCommand();
+                command.Connection = connection;
                 command.CommandText = "delete from dbo.[Bundle]";
                 command.ExecuteNonQuery();
 
@@ -34,9 +34,6 @@ namespace YogurtAutoTesting.Tests.Support
                 command.ExecuteNonQuery();
 
                 command.CommandText = "delete from dbo.[Comment]";
-                command.ExecuteNonQuery();
-
-                command.CommandText = "delete from dbo.[District]";
                 command.ExecuteNonQuery();
 
                 command.CommandText = "delete from dbo.[Order]";

@@ -30,7 +30,7 @@ namespace YogurtAutoTesting.Models.Response
                 Id == model.Id &&
                 FirstName == model.FirstName &&
                 LastName == model.LastName &&
-                RegistrationDate == model.RegistrationDate &&
+                RegistrationDate.Date == model.RegistrationDate.Date &&
                 Email == model.Email &&
                 Phone == model.Phone &&
                 BirthDate == model.BirthDate;

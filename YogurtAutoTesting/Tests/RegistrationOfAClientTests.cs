@@ -1,7 +1,9 @@
-﻿using System;
-using YogurtAutoTesting.Models.Request;
+﻿using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Tests.StepDefinitions;
+using YogurtAutoTesting.Support;
+using YogurtAutoTesting.Tests.TestSources;
+using YogurtAutoTesting.Support.Mappers;
 
 namespace YogurtAutoTesting.Tests
 {
@@ -9,27 +11,31 @@ namespace YogurtAutoTesting.Tests
     {
         private AuthorizationSteps _authorizationSteps;
         private ClientsSteps _clientsSteps;
+        private BaseClearCommand _deleteFromDb;
+        private ClientMapper _clientMapper;
         public RegistrationOfAClient()
         {
             _authorizationSteps = new AuthorizationSteps();
             _clientsSteps = new ClientsSteps();
+            _deleteFromDb = new BaseClearCommand();
+            _clientMapper = new ClientMapper();
         }
 
-        [Test]
-        public void ClientCreate_WhenClientModelIsCorrect_ShouldCreateClient()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
+            _deleteFromDb.ClearBase();
+        }
 
-            ClientRequestModel clientRequest = new ClientRequestModel()
-            {
-                FirstName = "Константин",
-                LastName = "Придуманный",
-                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
-                Password = "thebestKostya666",
-                ConfirmPassword = "thebestKostya666",
-                Email = "kostik08@gmail.com",
-                Phone = "89996662233"
-            };
+        [TearDown]
+        public void TearDown()
+        {
+            _deleteFromDb.ClearBase();
+        }
 
+        [TestCaseSource(typeof(ClientRegister_WhenModelIsCorrect_TestSource))]
+        public void ClientCreate_WhenClientModelIsCorrect_ShouldCreateClient(ClientRequestModel clientRequest)
+        {
             int id = _authorizationSteps.RegisterClient(clientRequest);
 
             AuthRequestModel authModel = new AuthRequestModel()
@@ -42,65 +48,28 @@ namespace YogurtAutoTesting.Tests
 
             DateTime regTime = _clientsSteps.GetRegisterDate(id, token);
 
-            ClientResponseModel expectedClient = new ClientResponseModel()
-            {
-                Id = id,
-                FirstName = clientRequest.FirstName,
-                LastName = clientRequest.LastName,
-                RegistrationDate = regTime,
-                Email = clientRequest.Email,
-                Phone = clientRequest.Phone,
-                BirthDate = clientRequest.BirthDate
-            };
+            ClientResponseModel expectedClient = _clientMapper.MappClientRequestModelToClientResponseModel(clientRequest, id, regTime);
 
             _clientsSteps.GetClientByIdTest(id, token, expectedClient);
         }
 
-        [Test]
-        public void CreateClient_WhenPasswordLessThenFourSymbols_ShouldNotRegistrate()
+        [TestCaseSource(typeof(ClientRegister_WhenPasswordLessThenEightSymbols_TestSource))]
+        public void CreateClient_WhenPasswordLessThenEightSymbols_ShouldNotRegistrate(ClientRequestModel clientRequest)
         {
-            ClientRequestModel clientRequest = new ClientRequestModel()
-            {
-                FirstName = "Константин",
-                LastName = "Придуманный",
-                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
-                Password = "the8",
-                ConfirmPassword = "the8",
-                Email = "kostik888@gmail.com",
-                Phone = "89996662233"
-            };
             _authorizationSteps.CantRegisterClientTest(clientRequest);
         }
 
-        [Test]
-        public void CreateClient_WhenPasswordLessThenSevenSymbols_ShouldNotRegistrate()
+        [TestCaseSource(typeof(ClientRegister_WhenPasswordIsSevenSymbols_TestSource))]
+        public void CreateClient_WhenPasswordSeventSymbols_ShouldNotRegistrate(ClientRequestModel clientRequest)
         {
-            ClientRequestModel clientRequest = new ClientRequestModel()
-            {
-                FirstName = "Константин",
-                LastName = "Придуманный",
-                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
-                Password = "1234567",
-                ConfirmPassword = "1234567",
-                Email = "kostik888@gmail.com",
-                Phone = "89996662233"
-            };
             _authorizationSteps.CantRegisterClientTest(clientRequest);
         }
 
-        [Test]
-        public void CreateClient_WhenEnterExistsEmail_ShouldNotRegistrate()
+        [TestCaseSource(typeof(ClientRegister_WhenModelIsCorrect_TestSource))]
+        public void CreateClient_WhenEnterExistsEmail_ShouldNotRegistrate(ClientRequestModel clientRequest)
         {
-            ClientRequestModel clientRequest = new ClientRequestModel()
-            {
-                FirstName = "Константин",
-                LastName = "Придуманный",
-                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
-                Password = "12345678",
-                ConfirmPassword = "12345678",
-                Email = "kostik@gmail.com",
-                Phone = "89996662233"
-            };
+            _authorizationSteps.RegisterClient(clientRequest);
+
             _authorizationSteps.CantRegisterClientTest(clientRequest);
         }
 

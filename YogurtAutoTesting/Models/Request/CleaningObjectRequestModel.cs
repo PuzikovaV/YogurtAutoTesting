@@ -22,6 +22,9 @@ namespace YogurtAutoTesting.Models.Request
         [JsonPropertyName("address")]
         public string Address { get; set; }
 
+        [JsonPropertyName("district")]
+        public int District { get; set; }
+
         [JsonPropertyName("clientId")]
         public int ClientId { get; set; }
     }

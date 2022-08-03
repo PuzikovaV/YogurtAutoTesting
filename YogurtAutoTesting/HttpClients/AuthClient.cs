@@ -25,5 +25,21 @@ namespace YogurtAutoTesting.HttpClients
 
             return response.Content;
         }
+
+        public void DoNotAuthorize(AuthRequestModel model, HttpStatusCode expected)
+        {
+            string json = JsonSerializer.Serialize(model);
+            HttpClient client = new HttpClient();
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(Urls.Auth),
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

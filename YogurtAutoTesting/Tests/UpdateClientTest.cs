@@ -1,33 +1,40 @@
 ﻿using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Tests.StepDefinitions;
+using YogurtAutoTesting.Support;
+using YogurtAutoTesting.Tests.TestSources;
 
 namespace YogurtAutoTesting.Tests
 {
     public class UpdateClientTest
     {
-        AuthorizationSteps _authorizationSteps;
-        ClientsSteps _clientsSteps;
+        private AuthorizationSteps _authorizationSteps;
+        private ClientsSteps _clientsSteps;
+        private BaseClearCommand _deleteFromDb;
 
         public UpdateClientTest()
         {
             _authorizationSteps = new AuthorizationSteps();
             _clientsSteps = new ClientsSteps();
+            _deleteFromDb = new BaseClearCommand();
         }
-        [Test]
-        public void UpdateClient_WhenModelIsCorrect_ShouldUpdateClient()
-        {
-            ClientRequestModel clientRequest = new ClientRequestModel()
-            {
-                FirstName = "Константин",
-                LastName = "Придуманный",
-                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
-                Password = "thebestKostya666",
-                ConfirmPassword = "thebestKostya666",
-                Email = "kostik9978@gmail.com",
-                Phone = "89996662233"
-            };
+        
 
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            _deleteFromDb.ClearBase();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _deleteFromDb.ClearBase();
+        }
+
+        [TestCaseSource(typeof(ClientRegister_WhenModelIsCorrect_TestSource))]
+        public void UpdateClient_WhenModelIsCorrect_ShouldUpdateClient(ClientRequestModel clientRequest)
+        {
             int clientId = _authorizationSteps.RegisterClient(clientRequest);
 
             AuthRequestModel authModel = new AuthRequestModel()

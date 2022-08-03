@@ -1,14 +1,33 @@
 ﻿using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Tests.StepDefinitions;
+using YogurtAutoTesting.Support;
 
 namespace YogurtAutoTesting.Tests
 {
     public class CreateCleaningObjectTest
     {
-        AuthorizationSteps _authorizationSteps = new AuthorizationSteps();
-        CleaningObjectSteps _cleaningObjectSteps = new CleaningObjectSteps();
+        private AuthorizationSteps _authorizationSteps;
+        private CleaningObjectSteps _cleaningObjectSteps;
+        private BaseClearCommand _deleteFromDb;
+        public CreateCleaningObjectTest()
+        {
+            _authorizationSteps = new AuthorizationSteps();
+            _cleaningObjectSteps = new CleaningObjectSteps();
+            _deleteFromDb = new BaseClearCommand();
+        }
 
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            _deleteFromDb.ClearBase();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _deleteFromDb.ClearBase();
+        }
         [Test]
         public void CreateCleaningObject_WhenModelIsCorrect_ShouldCreateObject()
         {
@@ -41,7 +60,8 @@ namespace YogurtAutoTesting.Tests
                 NumberOfWindows = 6,
                 NumberOfBalconies = 2,
                 Address = "ул. Ленина д. 48, кв. 3",
-                ClientId = id
+                District = 2,
+                ClientId =  id
             };
 
             int cleaningObjectId = _cleaningObjectSteps.AddCleaningObjectTest(cleaningObjectRequest, token);
@@ -57,6 +77,7 @@ namespace YogurtAutoTesting.Tests
                 Address = cleaningObjectRequest.Address,
                 ClientId = cleaningObjectRequest.ClientId,
             };
+            _cleaningObjectSteps.GetCleaningObjectByIdTest(cleaningObjectId, token, expectedCleaningObjectResponseModel);
 
             List<CleaningObjectResponseModel> expectedCleaningObjectResponseModelList = new List<CleaningObjectResponseModel>
             {
