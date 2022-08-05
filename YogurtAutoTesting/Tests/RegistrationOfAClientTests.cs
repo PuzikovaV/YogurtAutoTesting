@@ -34,15 +34,9 @@ namespace YogurtAutoTesting.Tests
         }
 
         [TestCaseSource(typeof(ClientRegister_WhenModelIsCorrect_TestSource))]
-        public void ClientCreate_WhenClientModelIsCorrect_ShouldCreateClient(ClientRequestModel clientRequest)
+        public void ClientCreate_WhenClientModelIsCorrect_ShouldCreateClient(ClientRequestModel clientRequest, AuthRequestModel authModel)
         {
             int id = _authorizationSteps.RegisterClient(clientRequest);
-
-            AuthRequestModel authModel = new AuthRequestModel()
-            {
-                Email = clientRequest.Email,
-                Password = clientRequest.Password,
-            };
 
             string token = _authorizationSteps.Authorize(authModel);
 

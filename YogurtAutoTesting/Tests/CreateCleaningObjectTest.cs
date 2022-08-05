@@ -10,6 +10,8 @@ namespace YogurtAutoTesting.Tests
         private AuthorizationSteps _authorizationSteps;
         private CleaningObjectSteps _cleaningObjectSteps;
         private BaseClearCommand _deleteFromDb;
+        private int _id;
+        private string _token;
         public CreateCleaningObjectTest()
         {
             _authorizationSteps = new AuthorizationSteps();
@@ -20,16 +22,11 @@ namespace YogurtAutoTesting.Tests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _deleteFromDb.ClearBase();
-        }
 
-        [TearDown]
-        public void TearDown()
-        {
             _deleteFromDb.ClearBase();
         }
-        [Test]
-        public void CreateCleaningObject_WhenModelIsCorrect_ShouldCreateObject()
+        [SetUp]
+        public void SetUp()
         {
             ClientRequestModel clientRequest = new ClientRequestModel()
             {
@@ -42,7 +39,7 @@ namespace YogurtAutoTesting.Tests
                 Phone = "89996662233"
             };
 
-            int id = _authorizationSteps.RegisterClient(clientRequest);
+            _id = _authorizationSteps.RegisterClient(clientRequest);
 
             AuthRequestModel authModel = new AuthRequestModel()
             {
@@ -50,8 +47,17 @@ namespace YogurtAutoTesting.Tests
                 Password = clientRequest.Password,
             };
 
-            string token = _authorizationSteps.Authorize(authModel);
+           _token = _authorizationSteps.Authorize(authModel);
+        }
 
+        [TearDown]
+        public void TearDown()
+        {
+            _deleteFromDb.ClearBase();
+        }
+        [Test]
+        public void CreateCleaningObject_WhenModelIsCorrect_ShouldCreateObject()
+        {
             CleaningObjectRequestModel cleaningObjectRequest = new CleaningObjectRequestModel()
             {
                 NumberOfRooms = 3,
@@ -60,11 +66,10 @@ namespace YogurtAutoTesting.Tests
                 NumberOfWindows = 6,
                 NumberOfBalconies = 2,
                 Address = "ул. Ленина д. 48, кв. 3",
-                District = 2,
-                ClientId =  id
+                District = 2,  
             };
-
-            int cleaningObjectId = _cleaningObjectSteps.AddCleaningObjectTest(cleaningObjectRequest, token);
+            cleaningObjectRequest.ClientId = _id;
+            int cleaningObjectId = _cleaningObjectSteps.AddCleaningObjectTest(cleaningObjectRequest, _token);
 
             CleaningObjectResponseModel expectedCleaningObjectResponseModel = new CleaningObjectResponseModel()
             {
@@ -77,13 +82,13 @@ namespace YogurtAutoTesting.Tests
                 Address = cleaningObjectRequest.Address,
                 ClientId = cleaningObjectRequest.ClientId,
             };
-            _cleaningObjectSteps.GetCleaningObjectByIdTest(cleaningObjectId, token, expectedCleaningObjectResponseModel);
+            _cleaningObjectSteps.GetCleaningObjectByIdTest(cleaningObjectId, _token, expectedCleaningObjectResponseModel);
 
             List<CleaningObjectResponseModel> expectedCleaningObjectResponseModelList = new List<CleaningObjectResponseModel>
             {
                 expectedCleaningObjectResponseModel,
             };
-            _cleaningObjectSteps.GetAllCleaningObjectsByClientIdTest(cleaningObjectId, token, expectedCleaningObjectResponseModelList);
+            _cleaningObjectSteps.GetAllCleaningObjectsByClientIdTest(cleaningObjectId, _token, expectedCleaningObjectResponseModelList);
         }
     }
 }

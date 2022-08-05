@@ -23,6 +23,7 @@ namespace YogurtAutoTesting.Tests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
+            _deleteFromDb.ClearBase();
             ClientRequestModel clientRequest = new ClientRequestModel()
             {
                 FirstName = "Константин",
@@ -43,9 +44,8 @@ namespace YogurtAutoTesting.Tests
             };
 
             _token = _authorizationSteps.Authorize(authModel);
-            _deleteFromDb.ClearBase();
-
         }
+
         [TearDown]
         public void TearDown()
         {
@@ -72,7 +72,6 @@ namespace YogurtAutoTesting.Tests
                     Rating = commentsRequest.Rating
                 }
             };
-
             _commentsSteps.GetCommentsByClientIdTest(_clientId, _token, expectedCommentsResponse);
 
         }

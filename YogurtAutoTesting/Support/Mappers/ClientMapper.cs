@@ -8,7 +8,7 @@ namespace YogurtAutoTesting.Support.Mappers
     {
         public ClientResponseModel MappClientRequestModelToClientResponseModel(ClientRequestModel model, int id, DateTime date)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<ClientResponseModel, ClientRequestModel>().ReverseMap());
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<ClientRequestModel, ClientResponseModel>());
             Mapper mapper = new Mapper(config);
             var responseModel = mapper.Map<ClientResponseModel>(model);
             responseModel.Id = id;

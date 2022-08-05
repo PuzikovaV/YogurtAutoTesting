@@ -64,5 +64,19 @@ namespace YogurtAutoTesting.HttpClients
 
             return response.Content;
         }
+
+        public void DeleteCleaningIbject(int id, string token, HttpStatusCode expected)
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"{Urls.CleaningObjects}/{id}")
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

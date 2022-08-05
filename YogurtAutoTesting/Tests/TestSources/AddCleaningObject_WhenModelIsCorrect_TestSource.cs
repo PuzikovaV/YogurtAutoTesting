@@ -3,11 +3,12 @@ using YogurtAutoTesting.Models.Request;
 
 namespace YogurtAutoTesting.Tests.TestSources
 {
-    public class ClientRegister_WhenModelIsCorrect_TestSource : IEnumerable
+    public class AddCleaningObject_WhenModelIsCorrect_TestSource : IEnumerable
     {
         public IEnumerator GetEnumerator()
         {
-            yield return new object[] {
+            yield return new object[]
+            {
                 new ClientRequestModel()
                 {
                     FirstName = "Константин",
@@ -22,10 +23,19 @@ namespace YogurtAutoTesting.Tests.TestSources
                 {
                     Email = "kostik@gmail.com",
                     Password = "thebestKostya666",
+                },
+                new CleaningObjectRequestModel()
+                {
+                    NumberOfRooms = 3,
+                    NumberOfBathrooms = 2,
+                    Square = 70,
+                    NumberOfWindows = 6,
+                    NumberOfBalconies = 2,
+                    Address = "ул. Ленина д. 48, кв. 3",
+                    District = 2
                 }
+
             };
         }
     }
 }
-
-
