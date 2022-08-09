@@ -2,7 +2,6 @@
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Tests.StepDefinitions;
 using YogurtAutoTesting.Support;
-using YogurtAutoTesting.Tests.TestSources;
 
 namespace YogurtAutoTesting.Tests
 {
@@ -11,6 +10,9 @@ namespace YogurtAutoTesting.Tests
         private AuthorizationSteps _authorizationSteps;
         private ClientsSteps _clientsSteps;
         private BaseClearCommand _deleteFromDb;
+        private int _clientId;
+        private string _token;
+        private ClientRequestModel _clientRequest;
 
         public UpdateClientTest()
         {
@@ -24,6 +26,26 @@ namespace YogurtAutoTesting.Tests
         public void OneTimeSetUp()
         {
             _deleteFromDb.ClearBase();
+            _clientRequest = new ClientRequestModel()
+            {
+                FirstName = "Константин",
+                LastName = "Придуманный",
+                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
+                Password = "thebestKostya666",
+                ConfirmPassword = "thebestKostya666",
+                Email = "kostik08@gmail.com",
+                Phone = "89996662233"
+            };
+
+            _clientId = _authorizationSteps.RegisterClient(_clientRequest);
+
+            AuthRequestModel authModel = new AuthRequestModel()
+            {
+                Email = _clientRequest.Email,
+                Password = _clientRequest.Password,
+            };
+
+            _token = _authorizationSteps.Authorize(authModel);
         }
 
         [TearDown]
@@ -32,19 +54,9 @@ namespace YogurtAutoTesting.Tests
             _deleteFromDb.ClearBase();
         }
 
-        [TestCaseSource(typeof(ClientRegister_WhenModelIsCorrect_TestSource))]
-        public void UpdateClient_WhenModelIsCorrect_ShouldUpdateClient(ClientRequestModel clientRequest)
+        [Test]
+        public void UpdateClient_WhenModelIsCorrect_ShouldUpdateClient()
         {
-            int clientId = _authorizationSteps.RegisterClient(clientRequest);
-
-            AuthRequestModel authModel = new AuthRequestModel()
-            {
-                Email = clientRequest.Email,
-                Password = clientRequest.Password,
-            };
-
-            string token = _authorizationSteps.Authorize(authModel);
-
             UpdateClientRequestModel clientUpdateRequest = new UpdateClientRequestModel()
             {
                 FirstName = "Геннадий",
@@ -53,22 +65,22 @@ namespace YogurtAutoTesting.Tests
                 BirthDate = new DateTime(1978, 05, 08, 00, 00, 00)
             };
 
-            _clientsSteps.UpdateClientById(clientId, token, clientUpdateRequest);
+            _clientsSteps.UpdateClientById(_clientId, _token, clientUpdateRequest);
 
-            DateTime regTime = _clientsSteps.GetRegisterDate(clientId, token);
+            DateTime regTime = _clientsSteps.GetRegisterDate(_clientId, _token);
 
             ClientResponseModel expectedClient = new ClientResponseModel()
             {
-                Id = clientId,
+                Id = _clientId,
                 FirstName = clientUpdateRequest.FirstName,
                 LastName = clientUpdateRequest.LastName,
-                Email = clientRequest.Email,
+                Email = _clientRequest.Email,
                 Phone = clientUpdateRequest.Phone,
                 BirthDate = clientUpdateRequest.BirthDate,
                 RegistrationDate = regTime
             };
 
-            _clientsSteps.GetClientByIdTest(clientId, token, expectedClient);
+            _clientsSteps.GetClientByIdTest(_clientId, _token, expectedClient);
 
         }  
     }

@@ -33,7 +33,7 @@ namespace YogurtAutoTesting.Models.Response
                 RegistrationDate.Date == model.RegistrationDate.Date &&
                 Email == model.Email &&
                 Phone == model.Phone &&
-                BirthDate == model.BirthDate;
+                BirthDate.Date == model.BirthDate.Date;
         } 
     }
 }

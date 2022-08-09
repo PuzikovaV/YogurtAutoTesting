@@ -28,6 +28,9 @@ namespace YogurtAutoTesting.Models.Response
         [JsonPropertyName("address")]
         public string Address { get; set; }
 
+        [JsonPropertyName("district")]
+        public int District { get; set; }
+
         public override bool Equals(object? obj)
         {
             return obj is CleaningObjectResponseModel model &&
@@ -38,7 +41,8 @@ namespace YogurtAutoTesting.Models.Response
                    Square == model.Square &&
                    NumberOfWindows == model.NumberOfWindows &&
                    NumberOfBalconies == model.NumberOfBalconies &&
-                   Address == model.Address;
+                   Address == model.Address &&
+                   District == model.District;
         }
     }
 }

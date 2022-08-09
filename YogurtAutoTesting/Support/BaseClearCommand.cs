@@ -18,10 +18,16 @@ namespace YogurtAutoTesting.Support
                 command.CommandText = "delete from dbo.[BundleOrder]";
                 command.ExecuteNonQuery();
 
-                command.CommandText = "delete from dbo.[Cleaner]";
+                command.CommandText = "delete from dbo.[BundleService]";
+                command.ExecuteNonQuery();
+
+                command.CommandText = "delete from dbo.[CleanerService]";
                 command.ExecuteNonQuery();
 
                 command.CommandText = "delete from dbo.[CleanerDistrict]";
+                command.ExecuteNonQuery();
+
+                command.CommandText = "delete from dbo.[Cleaner]";
                 command.ExecuteNonQuery();
 
                 command.CommandText = "delete from dbo.[CleanerOrder]";

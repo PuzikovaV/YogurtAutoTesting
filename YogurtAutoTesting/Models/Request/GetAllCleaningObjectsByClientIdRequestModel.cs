@@ -7,11 +7,5 @@ namespace YogurtAutoTesting.Models.Request
         [JsonPropertyName("clientId")]
         public int ClientId { get; set; }
 
-        public override bool Equals(object? obj)
-        {
-            return obj is GetAllCleaningObjectsByClientIdRequestModel model && 
-                ClientId == model.ClientId;
-        }
-
     }
 }

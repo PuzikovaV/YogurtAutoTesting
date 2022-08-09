@@ -43,7 +43,7 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
 
         public List<CleaningObjectResponseModel> GetAllCleaningObjectsByClientIdTest(int id, string token, List<CleaningObjectResponseModel> expectedModel)
         {
-            HttpContent httpContent = _cleaningObjectClient.GetCleaningObjectById(id, token, HttpStatusCode.OK);
+            HttpContent httpContent = _cleaningObjectClient.GetAllCleaningObjectsByClientId(id, token, HttpStatusCode.OK);
             string content = httpContent.ReadAsStringAsync().Result;
 
             List<CleaningObjectResponseModel> actualModel = JsonSerializer.Deserialize<List<CleaningObjectResponseModel>>(content);

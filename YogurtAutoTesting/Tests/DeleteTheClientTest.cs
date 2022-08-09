@@ -31,11 +31,11 @@ namespace YogurtAutoTesting.Tests
         }
 
         [TestCaseSource(typeof(ClientRegister_WhenModelIsCorrect_TestSource))]
-        public void ClientIsDeleted_WhenIdIsCorrect_ShouldDeleteTheClient(ClientRequestModel clientRequest)
+        public void ClientIsDeleted_WhenIdIsCorrect_ShouldDeleteTheClient(ClientRequestModel clientRequest, AuthRequestModel authModel)
         {
             int clientId = _authorizationSteps.RegisterClient(clientRequest);
 
-            AuthRequestModel authModel = new AuthRequestModel()
+            authModel = new AuthRequestModel()
             {
                 Email = "Admin@gmail.com",
                 Password = "qwerty12345",
