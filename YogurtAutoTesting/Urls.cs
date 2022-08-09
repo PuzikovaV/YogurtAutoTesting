@@ -11,5 +11,7 @@
         public const string Cleaners = $"{Host}/Cleaners";
         public const string Comments = $"{Host}/Comments";
         public const string Orders = $"{Host}/Orders";
+        public const string Services = $"{Host}/Services";
+        
     }
 }

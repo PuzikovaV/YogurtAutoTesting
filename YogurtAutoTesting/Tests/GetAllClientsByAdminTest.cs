@@ -32,7 +32,7 @@ namespace YogurtAutoTesting.Tests
                 Password = "qwerty12345",
             };
 
-            _adminToken=_authorizationSteps.Authorize(authModel);
+            _adminToken = _authorizationSteps.Authorize(authModel);
 
         }
         [TearDown]
@@ -74,34 +74,24 @@ namespace YogurtAutoTesting.Tests
                 _ids.Add(id);
             }
 
-            List<ClientResponseModel> expectedModel = new List<ClientResponseModel>()
+            List<ClientResponseModel> expectedModel = new List<ClientResponseModel>();
+            for (int i = 0; i < _ids.Count; i++)
             {
-                new ClientResponseModel()
+                expectedModel.Add(new ClientResponseModel
                 {
-                    Id = _ids[0],
-                    LastName = clientsModel[0].LastName,
-                    FirstName = clientsModel[0].FirstName,
-                    BirthDate = clientsModel[0].BirthDate,
-                    Email = clientsModel[0].Email,
-                    Phone = clientsModel[0].Phone,
+                    Id = _ids[i],
+                    LastName = clientsModel[i].LastName,
+                    FirstName = clientsModel[i].FirstName,
+                    BirthDate = clientsModel[i].BirthDate,
+                    Email = clientsModel[i].Email,
+                    Phone = clientsModel[i].Phone,
                     RegistrationDate = regDate.Date
 
-                },
-                new ClientResponseModel()
-                {
-                    Id = _ids[1],
-                    LastName = clientsModel[1].LastName,
-                    FirstName = clientsModel[1].FirstName,
-                    BirthDate = clientsModel[1].BirthDate,
-                    Email = clientsModel[1].Email,
-                    Phone = clientsModel[1].Phone,
-                    RegistrationDate = regDate.Date
-
-                },
+                });
             };
 
             _clientsSteps.GetAllClientsByClientIdByAdminTest(_adminToken, expectedModel);
-            
+
         }
     }
 }

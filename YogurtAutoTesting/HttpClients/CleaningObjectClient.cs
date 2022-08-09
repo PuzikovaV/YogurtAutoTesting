@@ -55,7 +55,7 @@ namespace YogurtAutoTesting.HttpClients
             HttpRequestMessage message = new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(Urls.CleaningObjects),
+                RequestUri = new Uri($"{Urls.CleaningObjects}?clientId={id}"),
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
             HttpResponseMessage response = client.Send(message);

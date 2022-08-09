@@ -86,7 +86,7 @@ namespace YogurtAutoTesting.Tests
             };
             _cleaningObjectSteps.GetCleaningObjectByIdTest(cleaningObjectId, _token, expectedCleaningObjectResponseModel);
 
-            List<CleaningObjectResponseModel> expectedCleaningObjectResponseModelList = new List<CleaningObjectResponseModel>
+            List<CleaningObjectResponseModel> expectedCleaningObjectResponseModelList = new List<CleaningObjectResponseModel>()
             {
                 expectedCleaningObjectResponseModel,
             };
