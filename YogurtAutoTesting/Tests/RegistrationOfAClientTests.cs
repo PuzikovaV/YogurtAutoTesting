@@ -47,21 +47,36 @@ namespace YogurtAutoTesting.Tests
             _clientsSteps.GetClientByIdTest(id, token, expectedClient);
         }
 
-        [TestCaseSource(typeof(ClientRegister_WhenPasswordLessThenEightSymbols_TestSource))]
-        public void CreateClient_WhenPasswordLessThenEightSymbols_ShouldNotRegistrate(ClientRequestModel clientRequest)
+        [Test]
+        public void CreateClient_WhenPasswordLessThenEightSymbols_ShouldNotRegistrate()
         {
+            ClientRequestModel clientRequest = new ClientRequestModel()
+            {
+                FirstName = "Константин",
+                LastName = "Придуманный",
+                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
+                Password = "the8",
+                ConfirmPassword = "the8",
+                Email = "kostik@gmail.com",
+                Phone = "89996662233"
+            };
             _authorizationSteps.CantRegisterClientTest(clientRequest);
         }
 
-        [TestCaseSource(typeof(ClientRegister_WhenPasswordIsSevenSymbols_TestSource))]
-        public void CreateClient_WhenPasswordSeventSymbols_ShouldNotRegistrate(ClientRequestModel clientRequest)
+        [Test]
+        public void CreateClient_WhenEnterExistsEmail_ShouldNotRegistrate()
         {
-            _authorizationSteps.CantRegisterClientTest(clientRequest);
-        }
+            ClientRequestModel clientRequest = new ClientRequestModel()
+            {
+                FirstName = "Константин",
+                LastName = "Придуманный",
+                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
+                Password = "thebestKostya666",
+                ConfirmPassword = "thebestKostya666",
+                Email = "kostik@gmail.com",
+                Phone = "89996662233"
+            };
 
-        [TestCaseSource(typeof(ClientRegister_WhenModelIsCorrect_TestSource))]
-        public void CreateClient_WhenEnterExistsEmail_ShouldNotRegistrate(ClientRequestModel clientRequest)
-        {
             _authorizationSteps.RegisterClient(clientRequest);
 
             _authorizationSteps.CantRegisterClientTest(clientRequest);

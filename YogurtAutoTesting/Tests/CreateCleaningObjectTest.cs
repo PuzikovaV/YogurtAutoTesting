@@ -80,15 +80,17 @@ namespace YogurtAutoTesting.Tests
                 NumberOfWindows = cleaningObjectRequest.NumberOfWindows,
                 NumberOfBalconies = cleaningObjectRequest.NumberOfBalconies,
                 Address = cleaningObjectRequest.Address,
-                ClientId = cleaningObjectRequest.ClientId,
+                ClientId = _id,
+                District = 2
+
             };
             _cleaningObjectSteps.GetCleaningObjectByIdTest(cleaningObjectId, _token, expectedCleaningObjectResponseModel);
 
-            List<CleaningObjectResponseModel> expectedCleaningObjectResponseModelList = new List<CleaningObjectResponseModel>
+            List<CleaningObjectResponseModel> expectedCleaningObjectResponseModelList = new List<CleaningObjectResponseModel>()
             {
                 expectedCleaningObjectResponseModel,
             };
-            _cleaningObjectSteps.GetAllCleaningObjectsByClientIdTest(cleaningObjectId, _token, expectedCleaningObjectResponseModelList);
+            _cleaningObjectSteps.GetAllCleaningObjectsByClientIdTest(_id, _token, expectedCleaningObjectResponseModelList);
         }
     }
 }

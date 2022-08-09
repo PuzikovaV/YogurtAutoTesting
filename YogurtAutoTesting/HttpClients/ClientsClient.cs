@@ -44,6 +44,23 @@ namespace YogurtAutoTesting.HttpClients
             return response.Content;
         }
 
+        public HttpContent GetAllClientsByAdmin(string token, HttpStatusCode expected)
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(Urls.Clients)
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+
+            Assert.AreEqual(expected, actual);
+
+            return response.Content;
+        }
+
         public void DeleteClient(int id, string token, HttpStatusCode expectedCode)
         {
             HttpClient client = new HttpClient();

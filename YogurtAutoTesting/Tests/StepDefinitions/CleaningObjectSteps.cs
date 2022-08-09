@@ -17,8 +17,8 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
 
         public int AddCleaningObjectTest(CleaningObjectRequestModel model, string token)
         {
-            HttpContent httpContenet = _cleaningObjectClient.CreateACleaningObject(model, HttpStatusCode.Created, token);
-            string content = httpContenet.ReadAsStringAsync().Result;
+            HttpContent httpContent = _cleaningObjectClient.CreateACleaningObject(model, HttpStatusCode.Created, token);
+            string content = httpContent.ReadAsStringAsync().Result;
 
             Assert.NotNull(content);
 
@@ -43,7 +43,7 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
 
         public List<CleaningObjectResponseModel> GetAllCleaningObjectsByClientIdTest(int id, string token, List<CleaningObjectResponseModel> expectedModel)
         {
-            HttpContent httpContent = _cleaningObjectClient.GetCleaningObjectById(id, token, HttpStatusCode.OK);
+            HttpContent httpContent = _cleaningObjectClient.GetAllCleaningObjectsByClientId(id, token, HttpStatusCode.OK);
             string content = httpContent.ReadAsStringAsync().Result;
 
             List<CleaningObjectResponseModel> actualModel = JsonSerializer.Deserialize<List<CleaningObjectResponseModel>>(content);

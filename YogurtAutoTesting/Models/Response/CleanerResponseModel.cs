@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿
+using System.Text.Json.Serialization;
 
 namespace YogurtAutoTesting.Models.Response
 {
-    public class ClientResponseModel
+    public class CleanerResponseModel
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
@@ -24,16 +25,5 @@ namespace YogurtAutoTesting.Models.Response
 
         [JsonPropertyName("birthDate")]
         public DateTime BirthDate { get; set; }
-        public override bool Equals(object? obj)
-        {
-            return obj is ClientResponseModel model &&
-                Id == model.Id &&
-                FirstName == model.FirstName &&
-                LastName == model.LastName &&
-                RegistrationDate.Date == model.RegistrationDate.Date &&
-                Email == model.Email &&
-                Phone == model.Phone &&
-                BirthDate.Date == model.BirthDate.Date;
-        } 
     }
 }

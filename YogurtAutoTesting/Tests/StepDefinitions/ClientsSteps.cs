@@ -35,9 +35,9 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             return registerTime;
         }
 
-        public List<ClientResponseModel> GetAllClientsByClientIdByAdminTest(int id, string token, List<ClientResponseModel> expected)
+        public List<ClientResponseModel> GetAllClientsByClientIdByAdminTest(string token, List<ClientResponseModel> expected)
         {
-            HttpContent httpContent = _clientsClient.GetClientById(id, token, HttpStatusCode.OK);
+            HttpContent httpContent = _clientsClient.GetAllClientsByAdmin(token, HttpStatusCode.OK);
             string content = httpContent.ReadAsStringAsync().Result;
 
             List<ClientResponseModel> actual = JsonSerializer.Deserialize<List<ClientResponseModel>>(content);
