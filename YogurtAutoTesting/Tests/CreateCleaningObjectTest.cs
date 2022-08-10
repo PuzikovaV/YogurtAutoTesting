@@ -81,7 +81,7 @@ namespace YogurtAutoTesting.Tests
                 NumberOfBalconies = cleaningObjectRequest.NumberOfBalconies,
                 Address = cleaningObjectRequest.Address,
                 ClientId = _id,
-                District = 2
+                District = cleaningObjectRequest.District
 
             };
             _cleaningObjectSteps.GetCleaningObjectByIdTest(cleaningObjectId, _token, expectedCleaningObjectResponseModel);
