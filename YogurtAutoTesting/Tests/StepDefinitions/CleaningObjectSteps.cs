@@ -55,7 +55,12 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
 
         public void DeleteCleaningObjectTest(int id, string token)
         {
-            _cleaningObjectClient.DeleteCleaningIbject(id, token, HttpStatusCode.NoContent);
+            _cleaningObjectClient.DeleteCleaningObject(id, token, HttpStatusCode.NoContent);
+        }
+
+        public void UpdateCleaningObject(UpdateCleaningObjectRequestModel model, int id, string token)
+        {
+            _cleaningObjectClient.UpdateCleaningObject(model, id, token, HttpStatusCode.NoContent);
         }
     }
 }

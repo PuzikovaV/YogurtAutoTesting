@@ -69,17 +69,7 @@ namespace YogurtAutoTesting.Tests
             int idObject = _cleaningObjectSteps.AddCleaningObjectTest(requestModel, _token);
             _cleaningObjectSteps.DeleteCleaningObjectTest(idObject, _token);
             //CleaningObjectResponseModel expectedModel = _cleaningObjectMapper.MappCleaningObjectRequestModelToCleaningObjectResponseModel(requestModel, _clientId);
-            CleaningObjectResponseModel expectedModel = new CleaningObjectResponseModel()
-            {
-                NumberOfRooms = 3,
-                NumberOfBathrooms = 2,
-                Square = 70,
-                NumberOfWindows = 6,
-                NumberOfBalconies = 2,
-                Address = "ул. Ленина д. 48, кв. 3",
-                ClientId = _clientId,
-                Id = idObject
-            };
+            List<CleaningObjectResponseModel> expectedModel = new CleaningObjectResponseModel();
             _cleaningObjectSteps.GetCleaningObjectByIdTest(idObject, _token, expectedModel);
         }
     }
