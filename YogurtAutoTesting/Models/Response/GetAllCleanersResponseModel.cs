@@ -24,5 +24,17 @@ namespace YogurtAutoTesting.Models.Response
 
         [JsonPropertyName("birthDate")]
         public DateTime BirthDate { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is GetAllCleanersResponseModel model &&
+                Id == model.Id &&
+                FirstName == model.FirstName &&
+                LastName == model.LastName &&
+                RegistrationDate.Date == model.RegistrationDate.Date &&
+                Email == model.Email &&
+                Phone == model.Phone &&
+                BirthDate == model.BirthDate;
+        }
     }
 }
