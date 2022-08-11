@@ -42,5 +42,10 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             return actual;
         }
 
+        public List<GetAllCleanersResponseModel> GetAllCleanersByAdminTest(string token, List<GetAllCleanersResponseModel> expected)
+        {
+
+        }
+
     }
 }
