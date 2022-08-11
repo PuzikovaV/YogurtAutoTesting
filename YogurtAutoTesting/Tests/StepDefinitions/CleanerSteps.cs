@@ -44,7 +44,14 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
 
         public List<GetAllCleanersResponseModel> GetAllCleanersByAdminTest(string token, List<GetAllCleanersResponseModel> expected)
         {
+            HttpContent httpContent = _cleanerClient.GetAllCleaners(token, HttpStatusCode.OK);
+            string content = httpContent.ReadAsStringAsync().Result;
 
+            List<GetAllCleanersResponseModel> actual = JsonSerializer.Deserialize<List<GetAllCleanersResponseModel>>(content);
+
+            CollectionAssert.AreEquivalent(expected, actual);
+
+            return actual;
         }
 
     }
