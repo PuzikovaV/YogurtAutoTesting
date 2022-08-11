@@ -2,7 +2,7 @@
 
 namespace YogurtAutoTesting.Models.Response
 {
-    public class CommentsResponseModel
+    public class CommentsResponseModelBase
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
@@ -24,13 +24,7 @@ namespace YogurtAutoTesting.Models.Response
 
         public override bool Equals(object? obj)
         {
-            return obj is CommentsResponseModel model &&
-                Id == model.Id &&
-                Summary == model.Summary &&
-                ClientId == model.ClientId &&
-                CleanerId == model.CleanerId &&
-                OrderId == model.OrderId &&
-                Rating == model.Rating &&;
+            return base.Equals(obj);
         }
     }
 }

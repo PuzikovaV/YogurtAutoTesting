@@ -13,7 +13,6 @@ namespace YogurtAutoTesting.Tests
     public class UpdateCleaningObjectTest
     {
         private AuthorizationSteps _authorizationSteps;
-        private ClientsSteps _clientsSteps;
         private CleaningObjectSteps _cleaningObjectSteps;
         private BaseClearCommand _deleteFromDb;
         string _token;
@@ -23,7 +22,6 @@ namespace YogurtAutoTesting.Tests
         public UpdateCleaningObjectTest()
         {
             _authorizationSteps = new AuthorizationSteps();
-            _clientsSteps = new ClientsSteps();
             _cleaningObjectSteps = new CleaningObjectSteps();
             _deleteFromDb = new BaseClearCommand();
         }

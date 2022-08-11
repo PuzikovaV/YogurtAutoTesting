@@ -38,5 +38,20 @@ namespace YogurtAutoTesting.HttpClients
 
             return response.Content;
         }
+
+        public HttpContent GetAllCleaners(string token, HttpStatusCode expected)
+        {
+            HttpClient client = new HttpClient();
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(Urls.Cleaners),
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+            Assert.AreEqual(expected, actual);
+
+            return response.Content;
+        }
     }
 }
