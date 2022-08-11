@@ -1,5 +1,4 @@
-﻿
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace YogurtAutoTesting.Models.Response
 {
@@ -25,5 +24,17 @@ namespace YogurtAutoTesting.Models.Response
 
         [JsonPropertyName("birthDate")]
         public DateTime BirthDate { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is CleanerResponseModel model &&
+                Id == model.Id &&
+                FirstName == model.FirstName &&
+                LastName == model.LastName &&
+                BirthDate == model.BirthDate &&
+                Phone == model.Phone &&
+                Email == model.Email &&
+                RegistrationDate.Date == model.RegistrationDate.Date;
+        }
     }
 }

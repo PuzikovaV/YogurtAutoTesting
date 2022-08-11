@@ -24,7 +24,7 @@ namespace YogurtAutoTesting.HttpClients
             return response.Content;
         }
 
-        public HttpContent GetCleanerById(int id, int token, HttpStatusCode expected)
+        public HttpContent GetCleanerById(int id, string token, HttpStatusCode expected)
         {
             HttpClient client = new HttpClient();
             HttpRequestMessage message = new HttpRequestMessage()
