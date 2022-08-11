@@ -54,5 +54,10 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             return actual;
         }
 
+        public void DeleteCleanerByIdTest(int id, string token)
+        {
+            _cleanerClient.DeleteCleanerById(token, id, HttpStatusCode.NoContent);
+        }
+
     }
 }
