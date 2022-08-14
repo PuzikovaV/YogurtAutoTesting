@@ -12,13 +12,14 @@ namespace YogurtAutoTesting.Support
 
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
+
+                command.CommandText = "delete from dbo.[BundleService]";
+                command.ExecuteNonQuery();
+
                 command.CommandText = "delete from dbo.[Bundle]";
                 command.ExecuteNonQuery();
 
                 command.CommandText = "delete from dbo.[BundleOrder]";
-                command.ExecuteNonQuery();
-
-                command.CommandText = "delete from dbo.[BundleService]";
                 command.ExecuteNonQuery();
 
                 command.CommandText = "delete from dbo.[CleanerService]";

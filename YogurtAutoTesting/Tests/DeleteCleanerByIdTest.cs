@@ -79,7 +79,7 @@ namespace YogurtAutoTesting.Tests
         {
             _cleanerSteps.DeleteCleanerByIdTest(_cleanerId, _cleanerToken);
 
-            List<GetAllCleanersResponseModel> expected = new List<GetAllCleanersResponseModel>();
+            List<CleanerResponseModel> expected = new List<CleanerResponseModel>();
 
             _cleanerSteps.GetAllCleanersByAdminTest(_adminToken, expected);
         }

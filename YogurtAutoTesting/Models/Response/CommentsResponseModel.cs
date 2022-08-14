@@ -30,7 +30,7 @@ namespace YogurtAutoTesting.Models.Response
                 ClientId == model.ClientId &&
                 CleanerId == model.CleanerId &&
                 OrderId == model.OrderId &&
-                Rating == model.Rating &&;
+                Rating == model.Rating;
         }
     }
 }

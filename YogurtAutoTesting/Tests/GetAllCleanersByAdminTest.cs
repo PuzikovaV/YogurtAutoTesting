@@ -11,15 +11,17 @@ namespace YogurtAutoTesting.Tests
         private CleanerSteps _cleanerSteps;
         private ServiceSteps _serviceSteps;
         private BaseClearCommand _deleteFromDb;
-        string _adminToken;
-        int _serviceId;
-        List<int> _cleanerIds;
+        public string _adminToken;
+        public int _serviceId;
+        private List<int> _cleanerIds;
 
         public GetAllCleanersByAdminTest()
         {
             _authorizeSteps = new AuthorizationSteps();
+            _serviceSteps = new ServiceSteps();
             _cleanerSteps = new CleanerSteps();
             _deleteFromDb = new BaseClearCommand();
+            _cleanerIds = new List<int>();
         }
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -90,10 +92,10 @@ namespace YogurtAutoTesting.Tests
                 _cleanerIds.Add(id);
             };
 
-            List<GetAllCleanersResponseModel> expectedCleaners = new List<GetAllCleanersResponseModel>();
+            List<CleanerResponseModel> expectedCleaners = new List<CleanerResponseModel>();
             for (int i = 0; i < _cleanerIds.Count; i++)
             {
-                expectedCleaners.Add(new GetAllCleanersResponseModel
+                expectedCleaners.Add(new CleanerResponseModel
                 {
                     Id = _cleanerIds[i],
                     FirstName = cleanerRequest[i].FirstName,

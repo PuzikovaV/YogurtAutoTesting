@@ -85,7 +85,7 @@ namespace YogurtAutoTesting.Tests
                     BirthDate = clientsModel[i].BirthDate,
                     Email = clientsModel[i].Email,
                     Phone = clientsModel[i].Phone,
-                    RegistrationDate = regDate.Date
+                    RegistrationDate = regDate
 
                 });
             };

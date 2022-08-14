@@ -6,8 +6,14 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
 {
     public class AuthorizationSteps
     {
-        private AuthClient _authClient = new AuthClient();
-        private ClientsClient _clientsClient = new ClientsClient();
+        private AuthClient _authClient;
+        private ClientsClient _clientsClient;
+
+        public AuthorizationSteps()
+        {
+            _authClient = new AuthClient();
+            _clientsClient = new ClientsClient();
+        }
         public string Authorize(AuthRequestModel model)
         {
             HttpContent authContent = _authClient.Authorize(model, HttpStatusCode.OK);

@@ -89,7 +89,6 @@ namespace YogurtAutoTesting.Tests
                 Phone = cleanerModel.Phone,
                 RegistrationDate = regDate
             };
-
             _cleanerSteps.GetCleanerById(cleanerId, token, expectedCleaner);
         }
     }

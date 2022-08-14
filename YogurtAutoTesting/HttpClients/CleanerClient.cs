@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using YogurtAutoTesting.Models.Request;
@@ -27,6 +28,7 @@ namespace YogurtAutoTesting.HttpClients
         public HttpContent GetCleanerById(int id, string token, HttpStatusCode expected)
         {
             HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpRequestMessage message = new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
@@ -42,6 +44,7 @@ namespace YogurtAutoTesting.HttpClients
         public HttpContent GetAllCleaners(string token, HttpStatusCode expected)
         {
             HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpRequestMessage message = new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
@@ -57,10 +60,26 @@ namespace YogurtAutoTesting.HttpClients
         public void DeleteCleanerById(string token, int id, HttpStatusCode expected)
         {
             HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpRequestMessage message = new HttpRequestMessage()
             {
                 Method = HttpMethod.Delete,
-                RequestUri = new Uri(Urls.Cleaners)
+                RequestUri = new Uri($"{Urls.Cleaners}/{id}")
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+            Assert.AreEqual(expected, actual);
+        }
+
+        public void UpdateCleanerById(int id, string token, UpdateCleanerRequestModel model, HttpStatusCode expected)
+        {
+            HttpClient client = new HttpClient();
+            string json = JsonSerializer.Serialize(model);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Put,
+                RequestUri = new Uri($"{Urls.Cleaners}/{id}"),
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
             HttpResponseMessage response = client.Send(message);
             HttpStatusCode actual = response.StatusCode;

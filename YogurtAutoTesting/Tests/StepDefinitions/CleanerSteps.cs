@@ -42,12 +42,12 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             return actual;
         }
 
-        public List<GetAllCleanersResponseModel> GetAllCleanersByAdminTest(string token, List<GetAllCleanersResponseModel> expected)
+        public List<CleanerResponseModel> GetAllCleanersByAdminTest(string token, List<CleanerResponseModel> expected)
         {
             HttpContent httpContent = _cleanerClient.GetAllCleaners(token, HttpStatusCode.OK);
             string content = httpContent.ReadAsStringAsync().Result;
 
-            List<GetAllCleanersResponseModel> actual = JsonSerializer.Deserialize<List<GetAllCleanersResponseModel>>(content);
+            List<CleanerResponseModel> actual = JsonSerializer.Deserialize<List<CleanerResponseModel>>(content);
 
             CollectionAssert.AreEquivalent(expected, actual);
 
@@ -57,6 +57,10 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
         public void DeleteCleanerByIdTest(int id, string token)
         {
             _cleanerClient.DeleteCleanerById(token, id, HttpStatusCode.NoContent);
+        }
+        public void UpdateCleanerByIdTest(int id, string token, UpdateCleanerRequestModel model)
+        {
+            _cleanerClient.UpdateCleanerById(id, token, model, HttpStatusCode.NoContent);
         }
 
     }

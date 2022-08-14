@@ -10,7 +10,7 @@ namespace YogurtAutoTesting.Tests
         private AuthorizationSteps _authorizationSteps;
         private ServiceSteps _serviceSteps;
         private BaseClearCommand _baseClearCommand;
-        private string _adminToken;
+        string _adminToken;
 
         public CreateServiceTest()
         {
@@ -60,6 +60,11 @@ namespace YogurtAutoTesting.Tests
             };
 
             _serviceSteps.GetServiceByIdTest(serviseId, _adminToken, expected);
+            List<ServicesResponseModel> expectedList = new List<ServicesResponseModel>()
+            {
+                expected,
+            };
+            _serviceSteps.GetAllServicesTest(_adminToken, expectedList);
         }
     }
 }

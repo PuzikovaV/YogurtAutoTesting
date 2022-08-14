@@ -35,5 +35,26 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
 
             return actual;
         }
+
+        public List<ServicesResponseModel> GetAllServicesTest(string token, List<ServicesResponseModel> expected)
+        {
+            HttpContent httpContent = _servicesClient.GetAllServices(token, HttpStatusCode.OK);
+            string content = httpContent.ReadAsStringAsync().Result;
+            List<ServicesResponseModel> actual = JsonSerializer.Deserialize<List<ServicesResponseModel>>(content);
+
+            CollectionAssert.AreEquivalent(expected, actual);
+
+            return actual;
+        }
+
+        public void DeleteServiceById(int id, string token)
+        {
+            _servicesClient.DeleteServiceById(id, token, HttpStatusCode.NoContent);
+        }
+
+        public void UpdateServiceById(int id, string token, ServicesRequestModel model)
+        {
+            _servicesClient.UpdateServiceById(model, id, token, HttpStatusCode.NoContent);
+        }
     }
 }

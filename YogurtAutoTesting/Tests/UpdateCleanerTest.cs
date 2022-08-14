@@ -61,6 +61,8 @@ namespace YogurtAutoTesting.Tests
                 ServicesIds = new List<int> { _serviceId }
             };
 
+            _cleanerSteps.UpdateCleanerByIdTest(_cleanerId, _cleanerToken, updateModel);
+
             CleanerResponseModel responseModel = new CleanerResponseModel()
             {
                 Id = updateModel.Id,
