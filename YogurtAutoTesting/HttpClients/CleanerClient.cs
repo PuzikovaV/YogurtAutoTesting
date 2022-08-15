@@ -85,5 +85,50 @@ namespace YogurtAutoTesting.HttpClients
             HttpStatusCode actual = response.StatusCode;
             Assert.AreEqual(expected, actual);
         }
+
+        public HttpContent GetAllCommentsByClientId(int id, string token, HttpStatusCode expected)
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"{Urls.Clients}/{id}/comments-by-cleaner")
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+            Assert.AreEqual(expected, actual);
+            return response.Content;
+        }
+
+        public HttpContent GetAllOrdersByCleanerId(int id, string token, HttpStatusCode expected)
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"{Urls.Cleaners}/{id}/orders")
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+            Assert.AreEqual(expected, actual);
+            return response.Content;
+        }
+
+        public HttpContent GetAllCommentsAboutCleanerByCleanerId(int id, string token, HttpStatusCode expected)
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"{Urls.Cleaners}/{id}/comments-about-cleaner")
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+            Assert.AreEqual(expected, actual);
+            return response.Content;
+        }
     }
 }

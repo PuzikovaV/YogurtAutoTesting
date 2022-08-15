@@ -21,9 +21,7 @@ namespace YogurtAutoTesting.HttpClients
             };
             HttpResponseMessage response = client.Send(message);
             HttpStatusCode actualCode = response.StatusCode;
-
             Assert.AreEqual(expectedCode, actualCode);
-
             return response.Content;
         }
         
@@ -38,9 +36,7 @@ namespace YogurtAutoTesting.HttpClients
             };
             HttpResponseMessage response = client.Send(message);
             HttpStatusCode actualCode = response.StatusCode;
-
             Assert.AreEqual(expectedCode, actualCode);
-
             return response.Content;
         }
 
@@ -55,9 +51,7 @@ namespace YogurtAutoTesting.HttpClients
             };
             HttpResponseMessage response = client.Send(message);
             HttpStatusCode actual = response.StatusCode;
-
             Assert.AreEqual(expected, actual);
-
             return response.Content;
         }
 
@@ -72,7 +66,6 @@ namespace YogurtAutoTesting.HttpClients
             };
             HttpResponseMessage response = client.Send(message);
             HttpStatusCode actualCode = response.StatusCode;
-
             Assert.AreEqual(expectedCode, actualCode);
         }
 
@@ -87,10 +80,8 @@ namespace YogurtAutoTesting.HttpClients
                 RequestUri = new Uri($"{Urls.Clients}/{id}"),
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
-
             HttpResponseMessage response = client.Send(message);
             HttpStatusCode actual = response.StatusCode;
-
             Assert.AreEqual(expected, actual);
 
         }
@@ -102,13 +93,41 @@ namespace YogurtAutoTesting.HttpClients
             HttpRequestMessage message = new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"{Urls.Clients}/{id}/comments")
+                RequestUri = new Uri($"{Urls.Clients}/{id}/comments-by-client")
             };
             HttpResponseMessage response = client.Send(message);
             HttpStatusCode actual = response.StatusCode;
-
             Assert.AreEqual(expected, actual);
+            return response.Content;
+        }
 
+        public HttpContent GetAllOrdersByClientId(int id, string token, HttpStatusCode expected)
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"{Urls.Clients}/{id}/orders")
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+            Assert.AreEqual(expected, actual);
+            return response.Content;
+        }
+
+        public HttpContent GetAllCommentsAboutClientByClientId(int id, string token, HttpStatusCode expected)
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"{Urls.Clients}/{id}/comments-about-client")
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+            Assert.AreEqual(expected, actual);
             return response.Content;
         }
     }
