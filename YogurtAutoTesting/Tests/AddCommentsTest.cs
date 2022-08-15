@@ -9,6 +9,7 @@ namespace YogurtAutoTesting.Tests
     {
         private AuthorizationSteps _authorizationSteps;
         private CommentsSteps _commentsSteps;
+        private ClientsSteps _clientsSteps;
         private BaseClearCommand _deleteFromDb;
         private string _token;
         private int _clientId;
@@ -72,7 +73,7 @@ namespace YogurtAutoTesting.Tests
                     Rating = commentsRequest.Rating
                 }
             };
-            _commentsSteps.GetCommentsByClientIdTest(_clientId, _token, expectedCommentsResponse);
+            _clientsSteps.GetCommentsByClientIdTest(_clientId, _token, expectedCommentsResponse);
 
         }
     }

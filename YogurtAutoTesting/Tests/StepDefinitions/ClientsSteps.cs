@@ -56,5 +56,14 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
         {
             _clientsClient.UpdateClient(model, id, token, HttpStatusCode.NoContent);
         }
+
+        public List<CommentsResponseModel> GetCommentsByClientIdTest(int id, string token, List<CommentsResponseModel> expected)
+        {
+            HttpContent content = _clientsClient.GetAllCommentsByClientId(id, token, HttpStatusCode.OK);
+            List<CommentsResponseModel> actual = JsonSerializer.Deserialize<List<CommentsResponseModel>>(content.ReadAsStringAsync().Result);
+            CollectionAssert.AreEquivalent(expected, actual);
+
+            return actual;
+        }
     }
 }

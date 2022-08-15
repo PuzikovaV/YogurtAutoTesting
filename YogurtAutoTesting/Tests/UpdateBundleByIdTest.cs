@@ -5,7 +5,7 @@ using YogurtAutoTesting.Tests.StepDefinitions;
 
 namespace YogurtAutoTesting.Tests
 {
-    public class AddBundleTest
+    public class UpdateBundleByIdTest
     {
         private BundlesSteps _bundleSteps;
         private ServiceSteps _serviceSteps;
@@ -16,7 +16,7 @@ namespace YogurtAutoTesting.Tests
         int _bundleId;
         string _adminToken;
 
-        public AddBundleTest()
+        public UpdateBundleByIdTest()
         {
             _bundleSteps = new BundlesSteps();
             _serviceSteps = new ServiceSteps();
@@ -46,15 +46,7 @@ namespace YogurtAutoTesting.Tests
                 Duration = 15
             };
             _serviceId = _serviceSteps.CreateServiceTest(_serviceModel, _adminToken);
-        }
-        [TearDown]
-        public void TearDown()
-        {
-            _deleteFromDb.ClearBase();
-        }
-        [Test]
-        public void CreateBundle_WhenModelIsCorrect_ShouldCreateBundle()
-        {
+
             BundlesRequestModel bundleModel = new BundlesRequestModel()
             {
                 Name = "Ежедневная уборка",
@@ -65,14 +57,33 @@ namespace YogurtAutoTesting.Tests
                 ServicesIds = new List<int>() { _serviceId }
             };
             _bundleId = _bundleSteps.CreateBundleTest(bundleModel, _adminToken);
+        }
+        [TearDown]
+        public void TearDown()
+        {
+            _deleteFromDb.ClearBase();
+        }
+        [Test]
+        public void UpdateBundle_WhenModelIsCorrect_ShouldUpdateBundle()
+        {
+            BundlesRequestModel updateModel = new BundlesRequestModel()
+            {
+                Name = "Ультра скоростная уборка",
+                Type = 2,
+                Price = 9000,
+                Duration = 20,
+                Measure = 1,
+                ServicesIds = new List<int>() { _serviceId }
+            };
+
+            _bundleSteps.UpdateBundleByIdTest(updateModel, _bundleId, _adminToken);
 
             BundlesResponseModel expectedModel = new BundlesResponseModel()
             {
-                Name = bundleModel.Name,
-                Type = bundleModel.Type,
-                Price = bundleModel.Price,
-                Duration = bundleModel.Duration,
-                Measure = bundleModel.Measure,
+                Name = updateModel.Name,
+                Type = updateModel.Type,
+                Duration = updateModel.Duration,
+                Measure = updateModel.Measure,
                 ServicesIds = new List<ServicesResponseModel>
                 {
                     new ServicesResponseModel
@@ -86,13 +97,8 @@ namespace YogurtAutoTesting.Tests
                 },
                 Id = _bundleId
             };
-            _bundleSteps.GetBundleByIdTest(_bundleId, _adminToken, expectedModel);
-            List<BundlesResponseModel> expectedBundlesList = new List<BundlesResponseModel>()
-            {
-                expectedModel
-            };
-            _bundleSteps.GetAllBundlesTest(_adminToken, expectedBundlesList);
-        }
 
+            _bundleSteps.GetBundleByIdTest(_bundleId, _adminToken, expectedModel);
+        }
     }
 }

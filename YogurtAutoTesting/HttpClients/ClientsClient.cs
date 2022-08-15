@@ -94,5 +94,22 @@ namespace YogurtAutoTesting.HttpClients
             Assert.AreEqual(expected, actual);
 
         }
+
+        public HttpContent GetAllCommentsByClientId(int id, string token, HttpStatusCode expected)
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"{Urls.Clients}/{id}/comments")
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+
+            Assert.AreEqual(expected, actual);
+
+            return response.Content;
+        }
     }
 }
