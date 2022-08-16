@@ -15,5 +15,6 @@ namespace YogurtAutoTesting.Support.Mappers
             responseModel.ClientId = id;
             return responseModel;
         }
+        
     }
 }

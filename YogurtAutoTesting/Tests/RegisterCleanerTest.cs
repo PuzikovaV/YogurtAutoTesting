@@ -38,6 +38,7 @@ namespace YogurtAutoTesting.Tests
                 Name = "Помыть микроволновку",
                 Price = 300.00,
                 Unit = "Кухня",
+                RoomType = 2,
                 Duration = 15
             };
             _serviceId = _serviceSteps.CreateServiceTest(requestModel, _adminToken);

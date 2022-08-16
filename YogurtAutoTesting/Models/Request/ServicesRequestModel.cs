@@ -13,6 +13,9 @@ namespace YogurtAutoTesting.Models.Request
         [JsonPropertyName("unit")]
         public string Unit { get; set; }
 
+        [JsonPropertyName("roomType")]
+        public int RoomType { get; set; }
+
         [JsonPropertyName("duration")]
         public double Duration { get; set; }
     }

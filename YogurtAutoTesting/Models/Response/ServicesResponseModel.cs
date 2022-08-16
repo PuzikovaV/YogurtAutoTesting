@@ -16,6 +16,9 @@ namespace YogurtAutoTesting.Models.Response
         [JsonPropertyName("unit")]
         public string Unit { get; set; }
 
+        [JsonPropertyName("roomType")]
+        public int RoomType { get; set; }
+
         [JsonPropertyName("duration")]
         public double Duration { get; set; }
 
@@ -26,6 +29,7 @@ namespace YogurtAutoTesting.Models.Response
                 Name == model.Name &&
                 Price == model.Price &&
                 Unit == model.Unit &&
+                RoomType == model.RoomType &&
                 Duration == model.Duration;
         }
     }

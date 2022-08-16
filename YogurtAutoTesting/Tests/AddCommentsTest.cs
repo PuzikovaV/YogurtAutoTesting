@@ -62,7 +62,7 @@ namespace YogurtAutoTesting.Tests
                 OrderId = 1,
                 Rating = 5
             };
-            int commentId = _commentsSteps.AddCommentTest(commentsRequest, _token);
+            int commentId = _commentsSteps.AddCommentByClientTest(commentsRequest, _token);
 
             List<CommentsResponseModel> expectedCommentsResponse = new List<CommentsResponseModel>()
             {

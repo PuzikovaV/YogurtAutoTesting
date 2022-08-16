@@ -19,6 +19,7 @@ namespace YogurtAutoTesting.Tests.TestSources
                     Name = "Помыть микроволновку",
                     Price = 300.00,
                     Unit = "Кухня",
+                    RoomType = 2,
                     Duration = 15
                 },
                 new CleanerRequestModel()

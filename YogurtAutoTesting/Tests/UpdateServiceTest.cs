@@ -1,6 +1,7 @@
 ﻿using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Support;
+using YogurtAutoTesting.Support.Mappers;
 using YogurtAutoTesting.Tests.StepDefinitions;
 
 namespace YogurtAutoTesting.Tests
@@ -10,6 +11,7 @@ namespace YogurtAutoTesting.Tests
         private AuthorizationSteps _authorizationSteps;
         private ServiceSteps _serviceSteps;
         private BaseClearCommand _deleteFromDb;
+        private ServicesMapper _servicesMapper;
         int _serviceId;
         string _adminToken;
 
@@ -18,6 +20,7 @@ namespace YogurtAutoTesting.Tests
             _authorizationSteps = new AuthorizationSteps();
             _serviceSteps = new ServiceSteps();
             _deleteFromDb = new BaseClearCommand();
+            _servicesMapper = new ServicesMapper();
         }
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -37,6 +40,7 @@ namespace YogurtAutoTesting.Tests
                 Name = "Помыть микроволновку",
                 Price = 300.00,
                 Unit = "Кухня",
+                RoomType = 2,
                 Duration = 15
             };
 
@@ -56,18 +60,12 @@ namespace YogurtAutoTesting.Tests
                 Name = "Помыть холодильник",
                 Price = 500.00,
                 Unit = "Кухня",
+                RoomType = 1,
                 Duration = 60
             };
             _serviceSteps.UpdateServiceById(_serviceId, _adminToken, updateModel);
 
-            ServicesResponseModel expected = new ServicesResponseModel()
-            {
-                Name = updateModel.Name,
-                Price = updateModel.Price,
-                Unit = updateModel.Unit,
-                Duration = updateModel.Duration,
-                Id = _serviceId
-            };
+            ServicesResponseModel expected = _servicesMapper.MappServiceRequestModelToServiceResponseModel(updateModel, _serviceId);
             _serviceSteps.GetServiceByIdTest(_serviceId, _adminToken, expected);
         }
 

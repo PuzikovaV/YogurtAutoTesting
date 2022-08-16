@@ -2,6 +2,7 @@
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Tests.StepDefinitions;
 using YogurtAutoTesting.Support;
+using YogurtAutoTesting.Support.Mappers;
 
 namespace YogurtAutoTesting.Tests
 {
@@ -9,6 +10,7 @@ namespace YogurtAutoTesting.Tests
     {
         private AuthorizationSteps _authorizationSteps;
         private CleaningObjectSteps _cleaningObjectSteps;
+        private CleaningObjectMapper _cleaningObjectMapper;
         private BaseClearCommand _deleteFromDb;
         private int _id;
         private string _token;
@@ -16,6 +18,7 @@ namespace YogurtAutoTesting.Tests
         {
             _authorizationSteps = new AuthorizationSteps();
             _cleaningObjectSteps = new CleaningObjectSteps();
+            _cleaningObjectMapper = new CleaningObjectMapper();
             _deleteFromDb = new BaseClearCommand();
         }
 
@@ -71,21 +74,9 @@ namespace YogurtAutoTesting.Tests
             cleaningObjectRequest.ClientId = _id;
             int cleaningObjectId = _cleaningObjectSteps.AddCleaningObjectTest(cleaningObjectRequest, _token);
 
-            CleaningObjectResponseModel expectedCleaningObjectResponseModel = new CleaningObjectResponseModel()
-            {
-                Id = cleaningObjectId,
-                NumberOfRooms = cleaningObjectRequest.NumberOfRooms,
-                NumberOfBathrooms = cleaningObjectRequest.NumberOfBathrooms,
-                Square = cleaningObjectRequest.Square,
-                NumberOfWindows = cleaningObjectRequest.NumberOfWindows,
-                NumberOfBalconies = cleaningObjectRequest.NumberOfBalconies,
-                Address = cleaningObjectRequest.Address,
-                ClientId = _id,
-                District = cleaningObjectRequest.District
-
-            };
+            CleaningObjectResponseModel expectedCleaningObjectResponseModel = 
+                _cleaningObjectMapper.MappCleaningObjectRequestModelToCleaningObjectResponseModel(cleaningObjectRequest, _id, cleaningObjectId);
             _cleaningObjectSteps.GetCleaningObjectByIdTest(cleaningObjectId, _token, expectedCleaningObjectResponseModel);
-
             List<CleaningObjectResponseModel> expectedCleaningObjectResponseModelList = new List<CleaningObjectResponseModel>()
             {
                 expectedCleaningObjectResponseModel,

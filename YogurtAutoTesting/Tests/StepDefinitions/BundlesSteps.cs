@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 using YogurtAutoTesting.HttpClients;
 using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
