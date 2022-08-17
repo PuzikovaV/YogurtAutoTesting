@@ -61,6 +61,20 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             CollectionAssert.AreEquivalent(expected, actual);
             return actual;
         }
+        public List<CommentsResponseModel> GetCommentsByCleanerIdTest(int id, string token, List<CommentsResponseModel> expected)
+        {
+            HttpContent content = _cleanerClient.GetAllCommentsByCleanerId(id, token, HttpStatusCode.OK);
+            List<CommentsResponseModel> actual = JsonSerializer.Deserialize<List<CommentsResponseModel>>(content.ReadAsStringAsync().Result);
+            CollectionAssert.AreEquivalent(expected, actual);
+            return actual;
+        }
+        public List<OrdersResponseModel> GetAllCleanersOrdersByIdTest(int id, string token, List<OrdersResponseModel> expected)
+        {
+            HttpContent content = _cleanerClient.GetAllOrdersByCleanerId(id, token, HttpStatusCode.OK);
+            List<OrdersResponseModel> actual = JsonSerializer.Deserialize<List<OrdersResponseModel>>(content.ReadAsStringAsync().Result);
+            CollectionAssert.AreEquivalent(expected, actual);
+            return actual;
+        }
 
     }
 }

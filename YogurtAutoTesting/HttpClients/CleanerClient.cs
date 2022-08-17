@@ -86,7 +86,7 @@ namespace YogurtAutoTesting.HttpClients
             Assert.AreEqual(expected, actual);
         }
 
-        public HttpContent GetAllCommentsByClientId(int id, string token, HttpStatusCode expected)
+        public HttpContent GetAllCommentsByCleanerId(int id, string token, HttpStatusCode expected)
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

@@ -3,6 +3,7 @@ using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Tests.StepDefinitions;
 using YogurtAutoTesting.Support;
 using YogurtAutoTesting.Support.Mappers;
+using YogurtAutoTesting.Tests.TestSources;
 
 namespace YogurtAutoTesting.Tests
 {
@@ -27,10 +28,7 @@ namespace YogurtAutoTesting.Tests
         {
 
             _deleteFromDb.ClearBase();
-        }
-        [SetUp]
-        public void SetUp()
-        {
+
             ClientRequestModel clientRequest = new ClientRequestModel()
             {
                 FirstName = "Константин",
@@ -50,7 +48,7 @@ namespace YogurtAutoTesting.Tests
                 Password = clientRequest.Password,
             };
 
-           _token = _authorizationSteps.Authorize(authModel);
+            _token = _authorizationSteps.Authorize(authModel);
         }
 
         [TearDown]
@@ -58,22 +56,11 @@ namespace YogurtAutoTesting.Tests
         {
             _deleteFromDb.ClearBase();
         }
-        [Test]
-        public void CreateCleaningObject_WhenModelIsCorrect_ShouldCreateObject()
+        [TestCaseSource(typeof(AddCleaningObject_WhenModelIsCorrect_TestSource))]
+        public void CreateCleaningObject_WhenModelIsCorrect_ShouldCreateObject(CleaningObjectRequestModel cleaningObjectRequest)
         {
-            CleaningObjectRequestModel cleaningObjectRequest = new CleaningObjectRequestModel()
-            {
-                NumberOfRooms = 3,
-                NumberOfBathrooms = 2,
-                Square = 70,
-                NumberOfWindows = 6,
-                NumberOfBalconies = 2,
-                Address = "ул. Ленина д. 48, кв. 3",
-                District = 2,  
-            };
             cleaningObjectRequest.ClientId = _id;
             int cleaningObjectId = _cleaningObjectSteps.AddCleaningObjectTest(cleaningObjectRequest, _token);
-
             CleaningObjectResponseModel expectedCleaningObjectResponseModel = 
                 _cleaningObjectMapper.MappCleaningObjectRequestModelToCleaningObjectResponseModel(cleaningObjectRequest, _id, cleaningObjectId);
             _cleaningObjectSteps.GetCleaningObjectByIdTest(cleaningObjectId, _token, expectedCleaningObjectResponseModel);

@@ -15,8 +15,7 @@ namespace YogurtAutoTesting.Tests.TestSources
                 NumberOfWindows = 6,
                 NumberOfBalconies = 2,
                 Address = "ул. Ленина д. 48, кв. 3",
-                District = 2,
-                ClientId = 0
+                District = 2
             };
         }
     }

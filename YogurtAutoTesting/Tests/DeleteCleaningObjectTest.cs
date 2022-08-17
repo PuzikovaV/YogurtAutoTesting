@@ -68,7 +68,6 @@ namespace YogurtAutoTesting.Tests
             requestModel.ClientId = _clientId;
             int idObject = _cleaningObjectSteps.AddCleaningObjectTest(requestModel, _token);
             _cleaningObjectSteps.DeleteCleaningObjectTest(idObject, _token);
-            //CleaningObjectResponseModel expectedModel = _cleaningObjectMapper.MappCleaningObjectRequestModelToCleaningObjectResponseModel(requestModel, _clientId);
             List<CleaningObjectResponseModel> expectedModel = new List<CleaningObjectResponseModel>();
             _cleaningObjectSteps.GetAllCleaningObjectsByClientIdTest(_clientId, _token, expectedModel);
         }

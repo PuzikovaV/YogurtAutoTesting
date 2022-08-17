@@ -1,6 +1,7 @@
 ﻿using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Support;
+using YogurtAutoTesting.Support.Mappers;
 using YogurtAutoTesting.Tests.StepDefinitions;
 
 namespace YogurtAutoTesting.Tests
@@ -10,6 +11,7 @@ namespace YogurtAutoTesting.Tests
         private AuthorizationSteps _authorizationSteps;
         private CleaningObjectSteps _cleaningObjectSteps;
         private BaseClearCommand _deleteFromDb;
+        private CleaningObjectMapper _cleaningObjectMapper;
         string _token;
         int _clientId;
         int _cleaningObjectId;
@@ -19,6 +21,7 @@ namespace YogurtAutoTesting.Tests
             _authorizationSteps = new AuthorizationSteps();
             _cleaningObjectSteps = new CleaningObjectSteps();
             _deleteFromDb = new BaseClearCommand();
+            _cleaningObjectMapper = new CleaningObjectMapper();
         }
 
         [OneTimeSetUp]
@@ -68,7 +71,7 @@ namespace YogurtAutoTesting.Tests
         [Test]
         public void UpdateCleaningObject_WhenModelIsCorrect_ShouldUpdateCleaningObject()
         {
-            UpdateCleaningObjectRequestModel updateModel = new UpdateCleaningObjectRequestModel()
+            CleaningObjectRequestModel updateModel = new CleaningObjectRequestModel()
             {
                 NumberOfRooms = 6,
                 NumberOfBathrooms = 3,
@@ -79,21 +82,7 @@ namespace YogurtAutoTesting.Tests
                 District = 5,
             };
             _cleaningObjectSteps.UpdateCleaningObject(updateModel, _cleaningObjectId, _token);
-
-            CleaningObjectResponseModel expectedResponse = new CleaningObjectResponseModel()
-            {
-
-                Id = _cleaningObjectId,
-                District = updateModel.District,
-                NumberOfRooms = updateModel.NumberOfRooms,
-                NumberOfBathrooms = updateModel.NumberOfBathrooms,
-                Square = updateModel.Square,
-                NumberOfWindows = updateModel.NumberOfWindows,
-                NumberOfBalconies = updateModel.NumberOfBalconies,
-                Address = updateModel.Address,
-                ClientId = _clientId, 
-            };
-
+            CleaningObjectResponseModel expectedResponse = _cleaningObjectMapper.MappCleaningObjectRequestModelToCleaningObjectResponseModel(updateModel, _clientId, _cleaningObjectId);
             _cleaningObjectSteps.GetCleaningObjectByIdTest(_cleaningObjectId, _token, expectedResponse);
         }
     }

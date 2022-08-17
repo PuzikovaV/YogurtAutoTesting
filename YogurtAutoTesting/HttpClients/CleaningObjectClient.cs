@@ -79,7 +79,7 @@ namespace YogurtAutoTesting.HttpClients
             Assert.AreEqual(expected, actual);
         }
 
-        public HttpContent UpdateCleaningObject(UpdateCleaningObjectRequestModel model, int id, string token, HttpStatusCode expected)
+        public HttpContent UpdateCleaningObject(CleaningObjectRequestModel model, int id, string token, HttpStatusCode expected)
         {
             string json = JsonSerializer.Serialize(model);
 

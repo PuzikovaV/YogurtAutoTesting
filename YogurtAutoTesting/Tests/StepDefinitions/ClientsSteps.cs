@@ -65,6 +65,13 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             CollectionAssert.AreEquivalent(expected, actual);
             return actual;
         }
-        
+        public List<OrdersResponseModel> GetAllClientOrdersByIdTest(int id, string token, List<OrdersResponseModel> expected)
+        {
+            HttpContent content = _clientsClient.GetAllOrdersByClientId(id, token, HttpStatusCode.OK);
+            List<OrdersResponseModel> actual = JsonSerializer.Deserialize<List<OrdersResponseModel>>(content.ReadAsStringAsync().Result);
+            CollectionAssert.AreEquivalent(expected, actual);
+            return actual;
+        }
+
     }
 }
