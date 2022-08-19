@@ -12,7 +12,7 @@ namespace YogurtAutoTesting.Support.Mappers
             Mapper mapper = new Mapper(config);
             var responseModel = mapper.Map<CleanerResponseModel>(model);
             responseModel.Id = id;
-            responseModel.RegistrationDate = date;
+            responseModel.DateOfStartWork = date;
             return responseModel;
         }
 
@@ -21,7 +21,7 @@ namespace YogurtAutoTesting.Support.Mappers
             var config = new MapperConfiguration(cfg => cfg.CreateMap<UpdateCleanerRequestModel, CleanerResponseModel>());
             Mapper mapper = new Mapper(config);
             var responseModel = mapper.Map<CleanerResponseModel>(model);
-            responseModel.RegistrationDate = date;
+            responseModel.DateOfStartWork = date;
             return responseModel;
         }
     }

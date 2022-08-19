@@ -71,7 +71,7 @@ namespace YogurtAutoTesting.Tests
                 BirthDate = updateModel.BirthDate,
                 Email = cleanerModel.Email,
                 Phone = updateModel.Phone,
-                RegistrationDate = DateTime.Now.Date
+                DateOfStartWork = DateTime.Now.Date
             };
             _cleanerSteps.GetCleanerById(_cleanerId, _cleanerToken, responseModel);
 

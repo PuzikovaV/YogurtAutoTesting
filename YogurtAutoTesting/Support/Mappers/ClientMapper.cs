@@ -15,5 +15,16 @@ namespace YogurtAutoTesting.Support.Mappers
             responseModel.RegistrationDate = date;
             return responseModel;
         }
+
+        public ClientResponseModel MappUpdateClientRequestModelToClientResponseModel(UpdateClientRequestModel model, int id, DateTime date, string email)
+        {
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<UpdateClientRequestModel, ClientResponseModel>());
+            Mapper mapper = new Mapper(config);
+            var responseModel = mapper.Map<ClientResponseModel>(model);
+            responseModel.Id = id;
+            responseModel.RegistrationDate = date;
+            responseModel.Email = email;
+            return responseModel;
+        }
     }
 }

@@ -1,35 +1,34 @@
 ﻿using YogurtAutoTesting.Models.Request;
+using YogurtAutoTesting.Support;
 using YogurtAutoTesting.Tests.StepDefinitions;
+using YogurtAutoTesting.Tests.TestSources;
 
 namespace YogurtAutoTesting.Tests
 {
     public class AuthorizeTest
     {
         private AuthorizationSteps _authorizationSteps;
+        private BaseClearCommand _deleteFromDb;
         public AuthorizeTest()
         {
             _authorizationSteps = new AuthorizationSteps();
+            _deleteFromDb = new BaseClearCommand();
+        }
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            _deleteFromDb.ClearBase();
+        }
+        [TearDown]
+        public void TearDown()
+        {
+            _deleteFromDb.ClearBase();
         }
 
-        [Test]
-        public void UserAuthorize_WhenAccountDoesNotExist_ShouldNotLogIn()
+        [TestCaseSource(typeof(ClientRegister_WhenModelIsCorrect_TestSource))]
+        public void UserAuthorize_WhenPasswordIsWrong_ShouldNotLogIn(ClientRequestModel clientModel, AuthRequestModel authModel)
         {
-            AuthRequestModel authModel = new AuthRequestModel()
-            {
-                Email = "sonyaSanchez@rambler.ru",
-                Password = "sonsan123456"
-            };
-            _authorizationSteps.DoNotAuthorizeTest(authModel);
-        }
-
-        [Test]
-        public void UserAuthorize_WhenPasswordIsWrong_ShouldNotLogIn()
-        {
-            AuthRequestModel authModel = new AuthRequestModel()
-            {
-                Email = "kostik00@gmail.com",
-                Password = "sonsan123456"
-            };
+            authModel.Password = "qqqwwweee";
             _authorizationSteps.DoNotAuthorizeTest(authModel);
 
         }

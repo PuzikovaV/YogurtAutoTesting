@@ -3,20 +3,12 @@ using YogurtAutoTesting.Models.Request;
 
 namespace YogurtAutoTesting.Tests.TestSources
 {
-    public class AddCleaner_WhenModelIsCorrect_TestCaseSource : IEnumerable
+    public class RegisterCleaner_WhenServiceIsEmpty_TestCaseSource : IEnumerable
     {
         public IEnumerator GetEnumerator()
         {
             yield return new object[]
-            {  
-                new ServicesRequestModel()
-                {
-                    Name = "Помыть микроволновку",
-                    Price = 300.00,
-                    Unit = "Кухня",
-                    RoomType = 2,
-                    Duration = 15
-                },
+            {
                 new CleanerRequestModel()
                 {
                     FirstName = "Зина",
@@ -28,7 +20,8 @@ namespace YogurtAutoTesting.Tests.TestSources
                     Passport = "1254789654",
                     Phone = "89998887744",
                     Schedule = 1,
-                    Districts = new List<int>() { 5, 6, 8 }
+                    Districts = new List<int>() { 5, 6, 8 },
+                    ServicesIds = new List<int>()
                 },
                 new AuthRequestModel()
                 {

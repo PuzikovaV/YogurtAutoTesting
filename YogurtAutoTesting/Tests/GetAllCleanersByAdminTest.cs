@@ -104,7 +104,7 @@ namespace YogurtAutoTesting.Tests
                     BirthDate = cleanerRequest[i].BirthDate,
                     Email = cleanerRequest[i].Email,
                     Phone = cleanerRequest[i].Phone,
-                    RegistrationDate = regDate.Date
+                    DateOfStartWork = regDate.Date
                 });
             };
             _cleanerSteps.GetAllCleanersByAdminTest(_adminToken, expectedCleaners);

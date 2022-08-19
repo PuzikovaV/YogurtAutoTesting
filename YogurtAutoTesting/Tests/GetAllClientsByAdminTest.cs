@@ -1,7 +1,9 @@
 ﻿using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Support;
+using YogurtAutoTesting.Support.Mappers;
 using YogurtAutoTesting.Tests.StepDefinitions;
+using YogurtAutoTesting.Tests.TestSources;
 
 namespace YogurtAutoTesting.Tests
 {
@@ -10,6 +12,9 @@ namespace YogurtAutoTesting.Tests
         private BaseClearCommand _deleteFromDb;
         private AuthorizationSteps _authorizationSteps;
         private ClientsSteps _clientsSteps;
+        private CleanerSteps _cleanerSteps;
+        private ServiceSteps _serviceSteps;
+        private ClientMapper _clientMapper;
         private List<int> _ids;
         private string _adminToken;
 
@@ -17,7 +22,10 @@ namespace YogurtAutoTesting.Tests
         {
             _authorizationSteps = new AuthorizationSteps();
             _clientsSteps = new ClientsSteps();
+            _cleanerSteps = new CleanerSteps();
+            _serviceSteps = new ServiceSteps();
             _deleteFromDb = new BaseClearCommand();
+            _clientMapper = new ClientMapper();
             _ids = new List<int>();
         }
 
@@ -31,9 +39,7 @@ namespace YogurtAutoTesting.Tests
                 Email = "Admin@gmail.com",
                 Password = "qwerty12345",
             };
-
             _adminToken = _authorizationSteps.Authorize(authModel);
-
         }
         [TearDown]
         public void TearDown()
@@ -41,43 +47,20 @@ namespace YogurtAutoTesting.Tests
             _deleteFromDb.ClearBase();
         }
 
-        [Test]
-        public void GetAllClientsTest()
+        [TestCaseSource(typeof(RegisterThreeClients_WhenModelIsCorrect_TestCaseSource))]
+        public void GetAllClients_WhenMClientsAreExist_ShouldGetAllClients(List<ClientRequestModel> clientsModel)
         {
-            List<ClientRequestModel> clientsModel = new List<ClientRequestModel>()
-            {
-                new ClientRequestModel()
-                {
-                    FirstName = "Константин",
-                    LastName = "Придуманный",
-                    BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
-                    Password = "thebestKostya666",
-                    ConfirmPassword = "thebestKostya666",
-                    Email = "kostik08@gmail.com",
-                    Phone = "89996662233"
-                },
-                new ClientRequestModel()
-                {
-                    FirstName = "Винни",
-                    LastName = "Пух",
-                    BirthDate = new DateTime(1921, 08, 21, 00, 00, 00),
-                    Password = "KristoferRobin",
-                    ConfirmPassword = "KristoferRobin",
-                    Email = "WinnieThePooh@gmail.com",
-                    Phone = "89998887766"
-                },
-            };
             DateTime regDate = DateTime.Now.Date;
             foreach (ClientRequestModel clientRequest in clientsModel)
             {
                 int id = _authorizationSteps.RegisterClient(clientRequest);
                 _ids.Add(id);
             }
-
             List<ClientResponseModel> expectedModel = new List<ClientResponseModel>();
             for (int i = 0; i < _ids.Count; i++)
             {
-                expectedModel.Add(new ClientResponseModel
+                expectedModel.Add(
+                    new ClientResponseModel
                 {
                     Id = _ids[i],
                     LastName = clientsModel[i].LastName,
@@ -86,12 +69,40 @@ namespace YogurtAutoTesting.Tests
                     Email = clientsModel[i].Email,
                     Phone = clientsModel[i].Phone,
                     RegistrationDate = regDate
-
                 });
             };
-
             _clientsSteps.GetAllClientsByClientIdByAdminTest(_adminToken, expectedModel);
+        }
 
+        [Test]
+        public void GetAllClients_WhenListIsEmpty_ShouldGetEmptyList()
+        {
+            List<ClientResponseModel> expected = new List<ClientResponseModel>();
+            _clientsSteps.GetAllClientsByClientIdByAdminTest(_adminToken, expected);
+        }
+
+        [TestCaseSource(typeof(ClientRegister_WhenModelIsCorrect_TestSource))]
+        public void GetAllClients_WhenClientAuthorize_ShouldNotGetAllClients(ClientRequestModel clientModel, AuthRequestModel clientAuth)
+        {
+            _authorizationSteps.RegisterClient(clientModel);
+            string clientToken = _authorizationSteps.Authorize(clientAuth);
+            _clientsSteps.GetAllClientsWhenAdminDoNotAuthorizeTest(clientToken);
+        }
+        [TestCaseSource(typeof(AddCleaner_WhenModelIsCorrect_TestCaseSource))]
+        public void GetAllClient_WhenCleanerAuthorize_ShouldNotGetAllClients(ServicesRequestModel serviceModel, CleanerRequestModel cleanerRequest, AuthRequestModel cleanerAuth)
+        {
+            int serviceId = _serviceSteps.CreateServiceTest(serviceModel, _adminToken);
+            cleanerRequest.ServicesIds = new List<int> { serviceId };
+            _cleanerSteps.CreateCleanerTest(cleanerRequest);
+            string cleanerToken = _authorizationSteps.Authorize(cleanerAuth);
+            _clientsSteps.GetAllClientsWhenAdminDoNotAuthorizeTest(cleanerToken);
+
+        }
+        [Test]
+        public void GetAllClients_WhenUnauthorize_ShouldNotGetAllClients()
+        {
+            string token = "";
+            _clientsSteps.GetAllClientsWhenUnauthorizedTest(token);
         }
     }
 }

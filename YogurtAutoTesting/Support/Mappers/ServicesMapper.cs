@@ -14,5 +14,13 @@ namespace YogurtAutoTesting.Support.Mappers
             responseModel.Id = id;
             return responseModel;
         }
+
+        public List<ServicesResponseModel> MappListServicesRequestModelToListServicesResponseModel(List<ServicesResponseModel> model)
+        {
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<ServicesRequestModel, ServicesResponseModel>());
+            Mapper mapper = new Mapper(config);
+            var responseModel = mapper.Map<List<ServicesResponseModel>>(model);
+            return responseModel;
+        }
     }
 }

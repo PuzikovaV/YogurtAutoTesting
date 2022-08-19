@@ -42,7 +42,7 @@ namespace YogurtAutoTesting.Models.Response
 
         public override bool Equals(object? obj)
         {
-            if (obj == null || (obj is OrdersResponseModel))
+            if (obj == null || !(obj is OrdersResponseModel))
             {
                 return false;
             }
@@ -52,20 +52,12 @@ namespace YogurtAutoTesting.Models.Response
                 return false;
             }
 
-            if (obj == null || (obj is OrdersResponseModel))
-            {
-                return false;
-            }
             CleaningObjectResponseModel cleaningObject = ((OrdersResponseModel)obj).CleaningObject;
             if (!cleaningObject.Equals(this.CleaningObject))
             {
                 return false;
             }
 
-            if (obj == null || (obj is OrdersResponseModel))
-            {
-                return false;
-            }
             List<BundlesResponseModel> bundles = ((OrdersResponseModel)obj).Bundles;
             if (bundles.Count != this.Bundles.Count)
             {
@@ -79,10 +71,6 @@ namespace YogurtAutoTesting.Models.Response
                 }
             }
 
-            if (obj == null || (obj is OrdersResponseModel))
-            {
-                return false;
-            }
             List<ServicesResponseModel> services = ((OrdersResponseModel)obj).Services;
             if (services.Count != this.Services.Count)
             {
@@ -96,10 +84,6 @@ namespace YogurtAutoTesting.Models.Response
                 }
             }
 
-            if (obj == null || (obj is OrdersResponseModel))
-            {
-                return false;
-            }
             List<CleanerResponseModel> cleanersBand = ((OrdersResponseModel)obj).CleanersBand;
             if (cleanersBand.Count != this.CleanersBand.Count)
             {
@@ -113,10 +97,6 @@ namespace YogurtAutoTesting.Models.Response
                 }
             }
 
-            if (obj == null || (obj is OrdersResponseModel))
-            {
-                return false;
-            }
             List<CommentsResponseModel> comments = ((OrdersResponseModel)obj).Comments;
             if (comments.Count != this.Comments.Count)
             {

@@ -13,8 +13,8 @@ namespace YogurtAutoTesting.Models.Response
         [JsonPropertyName("lastName")]
         public string LastName { get; set; }
 
-        [JsonPropertyName("registrationDate")]
-        public DateTime RegistrationDate { get; set; }
+        [JsonPropertyName("dateOfStartWork")]
+        public DateTime DateOfStartWork { get; set; }
 
         [JsonPropertyName("email")]
         public string Email { get; set; }
@@ -25,16 +25,28 @@ namespace YogurtAutoTesting.Models.Response
         [JsonPropertyName("birthDate")]
         public DateTime BirthDate { get; set; }
 
+        [JsonPropertyName("rating")]
+        public double Rating { get; set; }
+
+        [JsonPropertyName("services")]
+        public List<ServicesResponseModel> Services { get; set; }
+
         public override bool Equals(object? obj)
         {
+            if (obj == null || !(obj is CleanerResponseModel))
+            {
+                return false;
+            }
+            CollectionAssert.AreEquivalent(this.Services, ((CleanerResponseModel)obj).Services);
             return obj is CleanerResponseModel model &&
                 Id == model.Id &&
                 FirstName == model.FirstName &&
                 LastName == model.LastName &&
+                DateOfStartWork.Date == model.DateOfStartWork.Date &&
                 BirthDate == model.BirthDate &&
                 Phone == model.Phone &&
                 Email == model.Email &&
-                RegistrationDate.Date == model.RegistrationDate.Date;
+                Rating == model.Rating;
         }
     }
 }
