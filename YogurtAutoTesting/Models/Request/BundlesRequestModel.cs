@@ -10,6 +10,9 @@ namespace YogurtAutoTesting.Models.Request
         [JsonPropertyName("type")]
         public int Type { get; set; }
 
+        [JsonPropertyName("roomType")]
+        public int RoomType { get; set; }
+
         [JsonPropertyName("price")]
         public double Price { get; set; }
 

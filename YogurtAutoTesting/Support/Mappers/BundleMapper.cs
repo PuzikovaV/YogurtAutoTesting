@@ -17,7 +17,7 @@ namespace YogurtAutoTesting.Support.Mappers
             Mapper mapper = new Mapper(config);
             var responseModel = mapper.Map<BundlesResponseModel>(model);
             responseModel.Id = id;
-            responseModel.ServicesIds = _servicesMapper.MappListServicesRequestModelToListServicesResponseModel(services);
+            responseModel.Services = services;
             return responseModel;
         }
     }

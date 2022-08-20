@@ -14,32 +14,35 @@ namespace YogurtAutoTesting.Models.Response
         [JsonPropertyName("type")]
         public int Type { get; set; }
 
+        [JsonPropertyName("roomType")]
+        public int RoomType { get; set; }
+
         [JsonPropertyName("price")]
         public double Price { get; set; }
 
         [JsonPropertyName("measure")]
         public int Measure { get; set; }
 
-        [JsonPropertyName("servicesIds")]
-        public List<ServicesResponseModel> ServicesIds { get; set; }
+        [JsonPropertyName("services")]
+        public List<ServicesResponseModel> Services { get; set; }
 
         [JsonPropertyName("duration")]
         public double Duration { get; set; }
 
         public override bool Equals(object? obj)
         {
-            if (obj == null || (obj is BundlesResponseModel))
+            if (obj == null || !(obj is BundlesResponseModel))
             {
                 return false;
             }
-            List<ServicesResponseModel> servicesIds = ((BundlesResponseModel)obj).ServicesIds;
-            if (servicesIds.Count != this.ServicesIds.Count)
+            List<ServicesResponseModel> services = ((BundlesResponseModel)obj).Services;
+            if (services.Count != this.Services.Count)
             {
                 return false;
             }
-            for(int i=0; i<servicesIds.Count; i++)
+            for(int i=0; i<services.Count; i++)
             {
-                if (!servicesIds[i].Equals(this.ServicesIds[i]))
+                if (!services[i].Equals(this.Services[i]))
                 {
                     return false;
                 }
@@ -49,6 +52,7 @@ namespace YogurtAutoTesting.Models.Response
                 Id == model.Id &&
                 Name == model.Name &&
                 Type == model.Type &&
+                RoomType == model.RoomType &&
                 Price == model.Price &&
                 Measure == model.Measure &&
                 Duration == model.Duration;

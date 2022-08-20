@@ -85,7 +85,7 @@ namespace YogurtAutoTesting.Tests
                 Type = updateModel.Type,
                 Duration = updateModel.Duration,
                 Measure = updateModel.Measure,
-                ServicesIds = new List<ServicesResponseModel>
+                Services = new List<ServicesResponseModel>
                 {
                     new ServicesResponseModel
                     {

@@ -25,6 +25,8 @@ namespace YogurtAutoTesting.Tests
         private string _adminToken;
         private string _clientToken;
         private string _cleanerToken;
+        private ClientRequestModel _clientModel;
+        private DateTime _regDate;
         public CreateOrderTest()
         {
             _authorizationSteps = new AuthorizationSteps();
@@ -35,6 +37,7 @@ namespace YogurtAutoTesting.Tests
             _clientSteps = new ClientsSteps();
             _orderSteps = new OrdersSteps();
             _deleteFromDb = new BaseClearCommand();
+            _clientModel = new ClientRequestModel();
         }
 
         [OneTimeSetUp]
@@ -48,7 +51,6 @@ namespace YogurtAutoTesting.Tests
                 Password = "qwerty12345",
             };
             _adminToken = _authorizationSteps.Authorize(authModel);
-
             ServicesRequestModel serviceModel = new ServicesRequestModel()
             {
                 Name = "Помыть микроволновку",
@@ -58,18 +60,17 @@ namespace YogurtAutoTesting.Tests
                 Duration = 15
             };
             _serviceId = _serviceSteps.CreateServiceTest(serviceModel, _adminToken);
-
             BundlesRequestModel bundleModel = new BundlesRequestModel()
             {
                 Name = "Ежедневная уборка",
                 Type = 1,
+                RoomType = 2,
                 Price = 3000,
                 Duration = 120,
                 Measure = 2,
                 ServicesIds = new List<int>() { _serviceId }
             };
             _bundleId = _bundlesSteps.CreateBundleTest(bundleModel, _adminToken);
-
             CleanerRequestModel cleanerModel = new CleanerRequestModel()
             {
                 FirstName = "Зина",
@@ -84,10 +85,9 @@ namespace YogurtAutoTesting.Tests
                 Districts = new List<int>() { 5, 6, 8 },
                 ServicesIds = new List<int>(_serviceId)
             };
-            DateTime regDate = DateTime.Now.Date;
+            _regDate = DateTime.Now.Date;
             _cleanerSteps.CreateCleanerTest(cleanerModel);
-
-            ClientRequestModel clientModel = new ClientRequestModel()
+            _clientModel = new ClientRequestModel()
             {
                 FirstName = "Константин",
                 LastName = "Придуманный",
@@ -97,15 +97,13 @@ namespace YogurtAutoTesting.Tests
                 Email = "kostik@gmail.com",
                 Phone = "89996662233"
             };
-            _clientId = _authorizationSteps.RegisterClient(clientModel);
-
+            _clientId = _authorizationSteps.RegisterClient(_clientModel);
             AuthRequestModel authClientModel = new AuthRequestModel()
             {
-                Email = clientModel.Email,
-                Password = clientModel.Password
+                Email = _clientModel.Email,
+                Password = _clientModel.Password
             };
             _clientToken = _authorizationSteps.Authorize(authClientModel);
-
             CleaningObjectRequestModel cleaningObjectModel = new CleaningObjectRequestModel()
             {
                 NumberOfRooms = 3,
@@ -114,10 +112,10 @@ namespace YogurtAutoTesting.Tests
                 NumberOfWindows = 6,
                 NumberOfBalconies = 2,
                 Address = "ул. Ленина д. 48, кв. 3",
-                District = 2
+                District = 5,
+                ClientId = _clientId
             };
             _cleaningObjectId = _cleaningObjectSteps.AddCleaningObjectTest(cleaningObjectModel, _clientToken);
-
         }
 
         [TearDown]
@@ -136,7 +134,20 @@ namespace YogurtAutoTesting.Tests
                 StartTime = new DateTime(2022, 10, 11)
             };
             _orderId = _orderSteps.CreateOrderTest(orderModel, _clientToken);
-
+            OrdersResponseModel expectedModel = new OrdersResponseModel()
+            {
+                Id = _orderId,
+                Client = new ClientResponseModel()
+                {
+                    Id = _clientId,
+                    FirstName = _clientModel.FirstName,
+                    LastName = _clientModel.LastName,
+                    BirthDate = _clientModel.BirthDate,
+                    RegistrationDate = _regDate,
+                    Email = _clientModel.Email,
+                    Phone = _clientModel.Phone
+                },
+            };
         }
     }
 }

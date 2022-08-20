@@ -1,6 +1,7 @@
 ﻿using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Support;
+using YogurtAutoTesting.Support.Mappers;
 using YogurtAutoTesting.Tests.StepDefinitions;
 
 namespace YogurtAutoTesting.Tests
@@ -12,6 +13,9 @@ namespace YogurtAutoTesting.Tests
         private AuthorizationSteps _authorizationSteps;
         private BaseClearCommand _deleteFromDb;
         private ServicesRequestModel _serviceModel;
+        private BundleMapper _bundleMapper;
+        private ServicesMapper _servicesMapper;
+        private List<ServicesResponseModel> _servicesList;
         int _serviceId;
         int _bundleId;
         string _adminToken;
@@ -23,6 +27,9 @@ namespace YogurtAutoTesting.Tests
             _authorizationSteps = new AuthorizationSteps();
             _deleteFromDb = new BaseClearCommand();
             _serviceModel = new ServicesRequestModel();
+            _bundleMapper = new BundleMapper();
+            _servicesMapper = new ServicesMapper();
+            _servicesList = new List<ServicesResponseModel>();
         }
 
         [OneTimeSetUp]
@@ -35,15 +42,13 @@ namespace YogurtAutoTesting.Tests
                 Email = "Admin@gmail.com",
                 Password = "qwerty12345",
             };
-
             _adminToken = _authorizationSteps.Authorize(authModel);
-
             _serviceModel = new ServicesRequestModel()
             {
                 Name = "Помыть микроволновку",
                 Price = 300.00,
                 Unit = "Кухня",
-                RoomType = 2,
+                RoomType = 1,
                 Duration = 15
             };
             _serviceId = _serviceSteps.CreateServiceTest(_serviceModel, _adminToken);
@@ -63,31 +68,12 @@ namespace YogurtAutoTesting.Tests
                 Price = 3000,
                 Duration = 120,
                 Measure = 2,
-                ServicesIds = new List<int>() { _serviceId }
+                RoomType = 1,
+                ServicesIds = new List<int>(){_serviceId}
             };
             _bundleId = _bundleSteps.CreateBundleTest(bundleModel, _adminToken);
-
-            BundlesResponseModel expectedModel = new BundlesResponseModel()
-            {
-                Name = bundleModel.Name,
-                Type = bundleModel.Type,
-                Price = bundleModel.Price,
-                Duration = bundleModel.Duration,
-                Measure = bundleModel.Measure,
-                ServicesIds = new List<ServicesResponseModel>
-                {
-                    new ServicesResponseModel
-                    {
-                        Name = _serviceModel.Name,
-                        Duration = _serviceModel.Duration,
-                        Price = _serviceModel.Price,
-                        Unit = _serviceModel.Unit,
-                        RoomType = _serviceModel.RoomType,
-                        Id = _serviceId
-                    }
-                },
-                Id = _bundleId
-            };
+            _servicesList.Add(_servicesMapper.MappServiceRequestModelToServiceResponseModel(_serviceModel, _serviceId));
+            BundlesResponseModel expectedModel = _bundleMapper.MappBundleRequestModelToBundleResponseModel(bundleModel, _servicesList, _bundleId);
             _bundleSteps.GetBundleByIdTest(_bundleId, _adminToken, expectedModel);
             List<BundlesResponseModel> expectedBundlesList = new List<BundlesResponseModel>()
             {
