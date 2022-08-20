@@ -37,7 +37,19 @@ namespace YogurtAutoTesting.Models.Response
             {
                 return false;
             }
-            CollectionAssert.AreEquivalent(this.Services, ((CleanerResponseModel)obj).Services);
+            List<ServicesResponseModel> services = ((CleanerResponseModel)obj).Services;
+            if (services.Count != this.Services.Count)
+            {
+                return false;
+            }
+            for (int i = 0; i < services.Count; i++)
+            {
+                if (!services[i].Equals(this.Services[i]))
+                {
+                    return false;
+                }
+            }
+            //CollectionAssert.AreEquivalent(this.Services, ((CleanerResponseModel)obj).Services);
             return obj is CleanerResponseModel model &&
                 Id == model.Id &&
                 FirstName == model.FirstName &&

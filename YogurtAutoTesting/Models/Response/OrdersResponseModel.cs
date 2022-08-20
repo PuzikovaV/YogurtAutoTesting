@@ -70,7 +70,6 @@ namespace YogurtAutoTesting.Models.Response
                     return false;
                 }
             }
-
             List<ServicesResponseModel> services = ((OrdersResponseModel)obj).Services;
             if (services.Count != this.Services.Count)
             {

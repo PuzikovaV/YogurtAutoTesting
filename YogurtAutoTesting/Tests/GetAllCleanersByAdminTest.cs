@@ -1,6 +1,7 @@
 ﻿using YogurtAutoTesting.Models.Request;
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Support;
+using YogurtAutoTesting.Support.Mappers;
 using YogurtAutoTesting.Tests.StepDefinitions;
 
 namespace YogurtAutoTesting.Tests
@@ -14,6 +15,8 @@ namespace YogurtAutoTesting.Tests
         public string _adminToken;
         public int _serviceId;
         private List<int> _cleanerIds;
+        private ServicesMapper _servicesMapper;
+        private List<ServicesResponseModel> _serviceResponse;
 
         public GetAllCleanersByAdminTest()
         {
@@ -21,6 +24,8 @@ namespace YogurtAutoTesting.Tests
             _serviceSteps = new ServiceSteps();
             _cleanerSteps = new CleanerSteps();
             _deleteFromDb = new BaseClearCommand();
+            _servicesMapper = new ServicesMapper();
+            _serviceResponse = new List<ServicesResponseModel>();
             _cleanerIds = new List<int>();
         }
         [OneTimeSetUp]
@@ -34,7 +39,6 @@ namespace YogurtAutoTesting.Tests
                 Password = "qwerty12345",
             };
             _adminToken = _authorizeSteps.Authorize(authModel);
-
             ServicesRequestModel serviceModel = new ServicesRequestModel()
             {
                 Name = "Помыть микроволновку",
@@ -44,8 +48,7 @@ namespace YogurtAutoTesting.Tests
                 Duration = 15
             };
             _serviceId = _serviceSteps.CreateServiceTest(serviceModel, _adminToken);
-
-
+            _serviceResponse.Add(_servicesMapper.MappServiceRequestModelToServiceResponseModel(serviceModel, _serviceId));
         }
         [TearDown]
         public void TearDown()
@@ -69,7 +72,7 @@ namespace YogurtAutoTesting.Tests
                     Phone = "89998887744",
                     Schedule = 1,
                     Districts = new List<int>() { 5, 6, 8 },
-                    ServicesIds = new List<int>(_serviceId)
+                    ServicesIds = new List<int>(){_serviceId }
                 },
                 new CleanerRequestModel()
                 {
@@ -83,7 +86,7 @@ namespace YogurtAutoTesting.Tests
                     Phone = "85556662211",
                     Schedule = 2,
                     Districts = new List<int>() { 10, 4, 6, 2 },
-                    ServicesIds = new List<int>(_serviceId)
+                    ServicesIds = new List<int>(){_serviceId }
                 }
             };
             DateTime regDate = DateTime.Now.Date;
@@ -92,7 +95,6 @@ namespace YogurtAutoTesting.Tests
                 int id = _cleanerSteps.CreateCleanerTest(cleaner);
                 _cleanerIds.Add(id);
             };
-
             List<CleanerResponseModel> expectedCleaners = new List<CleanerResponseModel>();
             for (int i = 0; i < _cleanerIds.Count; i++)
             {
@@ -104,7 +106,8 @@ namespace YogurtAutoTesting.Tests
                     BirthDate = cleanerRequest[i].BirthDate,
                     Email = cleanerRequest[i].Email,
                     Phone = cleanerRequest[i].Phone,
-                    DateOfStartWork = regDate.Date
+                    DateOfStartWork = regDate.Date,
+                    Services = _serviceResponse
                 });
             };
             _cleanerSteps.GetAllCleanersByAdminTest(_adminToken, expectedCleaners);

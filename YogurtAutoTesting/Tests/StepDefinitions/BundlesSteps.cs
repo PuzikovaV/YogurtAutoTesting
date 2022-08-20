@@ -28,7 +28,6 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
         {
             HttpContent httpContent = _bundelsClient.GetById(id, token, HttpStatusCode.OK);
             string content = httpContent.ReadAsStringAsync().Result;
-
             BundlesResponseModel actual = JsonSerializer.Deserialize<BundlesResponseModel>(content);
             Assert.AreEqual(expected, actual);
 
@@ -60,7 +59,6 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
         {
             HttpContent httpContent = _bundelsClient.GetBundlesAdditionalServicesById(id, token, HttpStatusCode.OK);
             string content = httpContent.ReadAsStringAsync().Result;
-
             List<ServicesResponseModel> actual = JsonSerializer.Deserialize<List<ServicesResponseModel>>(content);
             CollectionAssert.AreEquivalent(expected, actual);
 

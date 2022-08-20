@@ -12,9 +12,9 @@ namespace YogurtAutoTesting.Tests
         private AuthorizationSteps _authorizationSteps;
         private BaseClearCommand _deleteFromDb;
         private ServicesRequestModel _serviceModel;
-        int _serviceId;
-        int _bundleId;
-        string _adminToken;
+        private int _serviceId;
+        private int _bundleId;
+        private string _adminToken;
 
         public UpdateBundleByIdTest()
         {
@@ -35,19 +35,16 @@ namespace YogurtAutoTesting.Tests
                 Email = "Admin@gmail.com",
                 Password = "qwerty12345",
             };
-
             _adminToken = _authorizationSteps.Authorize(authModel);
-
             _serviceModel = new ServicesRequestModel()
             {
                 Name = "Помыть микроволновку",
                 Price = 300.00,
                 Unit = "Кухня",
-                RoomType = 2,
+                RoomType = 1,
                 Duration = 15
             };
             _serviceId = _serviceSteps.CreateServiceTest(_serviceModel, _adminToken);
-
             BundlesRequestModel bundleModel = new BundlesRequestModel()
             {
                 Name = "Ежедневная уборка",
@@ -55,7 +52,8 @@ namespace YogurtAutoTesting.Tests
                 Price = 3000,
                 Duration = 120,
                 Measure = 2,
-                ServicesIds = new List<int>() { _serviceId }
+                RoomType = 1,
+                ServicesIds = new List<int>(){_serviceId}
             };
             _bundleId = _bundleSteps.CreateBundleTest(bundleModel, _adminToken);
         }
@@ -70,21 +68,22 @@ namespace YogurtAutoTesting.Tests
             BundlesRequestModel updateModel = new BundlesRequestModel()
             {
                 Name = "Ультра скоростная уборка",
-                Type = 2,
+                Type = 1,
                 Price = 9000,
                 Duration = 20,
-                Measure = 1,
-                ServicesIds = new List<int>() { _serviceId }
+                Measure = 2,
+                RoomType = 1,
+                ServicesIds = new List<int>(){_serviceId}
             };
-
             _bundleSteps.UpdateBundleByIdTest(updateModel, _bundleId, _adminToken);
-
             BundlesResponseModel expectedModel = new BundlesResponseModel()
             {
                 Name = updateModel.Name,
                 Type = updateModel.Type,
                 Duration = updateModel.Duration,
                 Measure = updateModel.Measure,
+                Price = updateModel.Price,
+                RoomType= updateModel.RoomType,
                 Services = new List<ServicesResponseModel>
                 {
                     new ServicesResponseModel
