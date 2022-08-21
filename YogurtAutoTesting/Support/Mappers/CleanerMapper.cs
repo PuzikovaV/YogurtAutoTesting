@@ -6,13 +6,15 @@ namespace YogurtAutoTesting.Support.Mappers
 {
     public class CleanerMapper
     {
-        public CleanerResponseModel MappCleanerRequestModelToCleanerResponseModel(CleanerRequestModel model, int id, DateTime date)
+        public CleanerResponseModel MappCleanerRequestModelToCleanerResponseModel(CleanerRequestModel model, int id, DateTime date, List<ServicesResponseModel> services)
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<CleanerRequestModel, CleanerResponseModel>());
             Mapper mapper = new Mapper(config);
             var responseModel = mapper.Map<CleanerResponseModel>(model);
             responseModel.Id = id;
             responseModel.DateOfStartWork = date;
+            responseModel.Services = services;
+
             return responseModel;
         }
 

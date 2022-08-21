@@ -2,14 +2,8 @@
 
 namespace YogurtAutoTesting.Models.Request
 {
-    public class OrderRequestModel
+    public class UpdateRequestModel
     {
-        [JsonPropertyName("cleaningObjectId")]
-        public int CleaningObjectId { get; set; }
-
-        [JsonPropertyName("clientId")]
-        public int ClientId { get; set; }
-
         [JsonPropertyName("startTime")]
         public DateTime StartTime { get; set; }
 
@@ -18,5 +12,8 @@ namespace YogurtAutoTesting.Models.Request
 
         [JsonPropertyName("servicesIds")]
         public List<int> ServicesIds { get; set; }
+
+        [JsonPropertyName("cleanersBandIds")]
+        public List<int> CleanersBandIds { get; set; }
     }
 }

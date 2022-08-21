@@ -111,9 +111,9 @@ namespace YogurtAutoTesting.Models.Response
             return obj is OrdersResponseModel model &&
                 Id == model.Id &&
                 Status == model.Status &&
-                StartTime == model.StartTime &&
-                EndTime == model.EndTime &&
-                UpdateTime == model.UpdateTime &&
+                StartTime.Date == model.StartTime .Date&&
+                EndTime.Date == model.EndTime.Date &&
+                UpdateTime.Date == model.UpdateTime.Date &&
                 Price == model.Price;
         }
     }

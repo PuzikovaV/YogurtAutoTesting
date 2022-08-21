@@ -6,11 +6,6 @@ namespace YogurtAutoTesting.Support.Mappers
 {
     public class BundleMapper
     {
-        private ServicesMapper _servicesMapper;
-        public BundleMapper()
-        {
-            _servicesMapper = new ServicesMapper();
-        }
         public BundlesResponseModel MappBundleRequestModelToBundleResponseModel(BundlesRequestModel model, List<ServicesResponseModel> services, int id)
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<BundlesRequestModel, BundlesResponseModel>());
