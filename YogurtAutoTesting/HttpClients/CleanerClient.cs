@@ -75,6 +75,7 @@ namespace YogurtAutoTesting.HttpClients
         {
             HttpClient client = new HttpClient();
             string json = JsonSerializer.Serialize(model);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpRequestMessage message = new HttpRequestMessage()
             {
                 Method = HttpMethod.Put,
