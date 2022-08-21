@@ -2,22 +2,35 @@
 using YogurtAutoTesting.Models.Response;
 using YogurtAutoTesting.Tests.StepDefinitions;
 using YogurtAutoTesting.Support;
+using YogurtAutoTesting.Tests.TestSources;
+using YogurtAutoTesting.Support.Mappers;
 
 namespace YogurtAutoTesting.Tests
 {
     public class AddCommentsTest
     {
         private AuthorizationSteps _authorizationSteps;
+        private CleaningObjectSteps _cleaningObjectSteps;
+        private ServiceSteps _serviceSteps;
+        private BundlesSteps _bundlesSteps;
+        private OrdersSteps _orderSteps;
+        private CleanerSteps _cleanerSteps;
         private CommentsSteps _commentsSteps;
         private ClientsSteps _clientsSteps;
+        private CommentsMapper _commentsMapper;
         private BaseClearCommand _deleteFromDb;
-        private string _token;
-        private int _clientId;
 
         public AddCommentsTest()
         {
             _authorizationSteps = new AuthorizationSteps();
+            _cleaningObjectSteps = new CleaningObjectSteps();
+            _serviceSteps = new ServiceSteps();
+            _cleanerSteps = new CleanerSteps();
+            _bundlesSteps = new BundlesSteps();
+            _orderSteps = new OrdersSteps();
             _commentsSteps = new CommentsSteps();
+            _clientsSteps = new ClientsSteps();
+            _commentsMapper = new CommentsMapper();
             _deleteFromDb = new BaseClearCommand();
         }
 
@@ -25,26 +38,6 @@ namespace YogurtAutoTesting.Tests
         public void OneTimeSetUp()
         {
             _deleteFromDb.ClearBase();
-            ClientRequestModel clientRequest = new ClientRequestModel()
-            {
-                FirstName = "Константин",
-                LastName = "Придуманный",
-                BirthDate = new DateTime(1966, 06, 16, 00, 00, 00),
-                Password = "thebestKostya666",
-                ConfirmPassword = "thebestKostya666",
-                Email = "kostik@gmail.com",
-                Phone = "89996662233"
-            };
-
-            _clientId = _authorizationSteps.RegisterClient(clientRequest);
-
-            AuthRequestModel authModel = new AuthRequestModel()
-            {
-                Email = clientRequest.Email,
-                Password = clientRequest.Password,
-            };
-
-            _token = _authorizationSteps.Authorize(authModel);
         }
 
         [TearDown]
@@ -52,30 +45,42 @@ namespace YogurtAutoTesting.Tests
         {
             _deleteFromDb.ClearBase();
         }
-
-        [Test]
-        public void CreateNewCommentByClient_WhenModelIsCorrect_ShouldCreateComment()
+        [TestCaseSource(typeof(CreateOrder_WhenModelIsCorrect_TestCaseSource))]
+        public void DeleteOrderById_WhenIdIsCorrect_ShouldDeleteOrder(AuthRequestModel adminAuthModel, ServicesRequestModel servicesRequest,
+            BundlesRequestModel bundlesRequest, CleanerRequestModel cleanerRequest, ClientRequestModel clientModel,
+            AuthRequestModel clientAuthModel, CleaningObjectRequestModel cleaningObjectRequest)
         {
-            CommentsRequestModel commentsRequest = new CommentsRequestModel()
+            DateTime regDate = DateTime.Now.Date;
+            string adminToken = _authorizationSteps.Authorize(adminAuthModel);
+            int serviceId = _serviceSteps.CreateServiceTest(servicesRequest, adminToken);
+            int bundleId = _bundlesSteps.CreateBundleTest(bundlesRequest, adminToken);
+            cleanerRequest.ServicesIds = new List<int>() { serviceId };
+            int cleanerId = _cleanerSteps.CreateCleanerTest(cleanerRequest);
+            int clientId = _authorizationSteps.RegisterClient(clientModel);
+            string clientToken = _authorizationSteps.Authorize(clientAuthModel);
+            int cleaningObjectId = _cleaningObjectSteps.AddCleaningObjectTest(cleaningObjectRequest, clientToken);
+            OrderRequestModel orderRequest = new OrderRequestModel()
+            {
+                ClientId = clientId,
+                CleaningObjectId = cleaningObjectId,
+                BundlesIds = new List<int>() { bundleId },
+                ServicesIds = new List<int>() { serviceId },
+                StartTime = new DateTime(2022, 09, 09, 13, 00, 00)
+            };
+            int orderId = _orderSteps.CreateOrderTest(orderRequest, clientToken);
+
+            CommentsRequestModel commentClientRequest = new CommentsRequestModel()
             {
                 Summary = "Хорошие клинеры, и уборка интересная",
-                OrderId = 1,
+                OrderId = orderId,
                 Rating = 5
             };
-            int commentId = _commentsSteps.AddCommentByClientTest(commentsRequest, _token);
+            int commentId = _commentsSteps.AddCommentByClientTest(commentClientRequest, clientToken);
 
-            List<CommentsResponseModel> expectedCommentsResponse = new List<CommentsResponseModel>()
-            {
-                new CommentsResponseModel()
-                {
-                    Summary = commentsRequest.Summary,
-                    OrderId = commentsRequest.OrderId,
-                    Rating = commentsRequest.Rating
-                }
-            };
-            _clientsSteps.GetCommentsByClientIdTest(_clientId, _token, expectedCommentsResponse);
+            List<CommentsResponseModel> expectedCommentsResponse = new List<CommentsResponseModel>;
+            expectedCommentsResponse.Add(_commentsMapper.MappCommentsRequestModelToCommentsResponseModel(commentClientRequest, commentId, cleanerId, clientId));
+            _clientsSteps.GetCommentsByClientIdTest(clientId, adminToken, expectedCommentsResponse);
 
         }
     }
 }
-

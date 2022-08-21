@@ -115,6 +115,17 @@ namespace YogurtAutoTesting.Tests
             OrdersResponseModel expected = _orderMapper.MappUpdateOrderRequestModelToOrderResponseModel(updateRequest, orderId, _clientResponse,
                 price, endTime, updateTime, status, _cleaningObjectResponse, _servicesResponseModel, _bundlesResponseModel,
                 _cleanerResponseModel, _commentsResponse);
+            _orderSteps.GetOrderByIdTest(orderId, adminToken, expected);
+
+            int updateStatus = 3;
+            _orderSteps.UpdateStatusByOrderIdTest(orderId, updateStatus, adminToken);
+            OrdersResponseModel expectedStatus = _orderMapper.MappUpdateOrderRequestModelToOrderResponseModel(updateRequest, orderId, _clientResponse,
+                price, endTime, updateTime, updateStatus, _cleaningObjectResponse, _servicesResponseModel, _bundlesResponseModel,
+                _cleanerResponseModel, _commentsResponse);
+            _orderSteps.GetOrderByIdTest(orderId, adminToken, expectedStatus);
+
+            int paymentStatus = 2;
+            _orderSteps.UpdatePaymentStatusByOrderIdTest(orderId, paymentStatus, adminToken);
         }
     }
 }

@@ -115,16 +115,28 @@ namespace YogurtAutoTesting.HttpClients
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpRequestMessage message = new HttpRequestMessage()
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"{Urls.Orders}/{id}/CleaningObject"),
+                Method = HttpMethod.Patch,
+                RequestUri = new Uri($"{Urls.Orders}/{id}/status"),
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
             HttpResponseMessage response = client.Send(message);
             HttpStatusCode actual = response.StatusCode;
             Assert.AreEqual(expected, actual);
         }
-
-
-
+        public void ChangeOrdersPaymentStatusById(int id, int status, string token, HttpStatusCode expected)
+        {
+            string json = JsonSerializer.Serialize(status);
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpRequestMessage message = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Patch,
+                RequestUri = new Uri($"{Urls.Orders}/{id}/payment-status"),
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            };
+            HttpResponseMessage response = client.Send(message);
+            HttpStatusCode actual = response.StatusCode;
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

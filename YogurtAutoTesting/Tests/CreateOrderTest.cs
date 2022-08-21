@@ -178,6 +178,12 @@ namespace YogurtAutoTesting.Tests
                 expectedModel
             };
             _orderSteps.GetAllOrdersTest(_adminToken, expectedList);
+
+            List<ServicesResponseModel> expectedServicesList = _servicesResponseModel;
+            _orderSteps.GetOrdersServicesByIdTest(_orderId, _adminToken, expectedServicesList);
+
+            CleaningObjectResponseModel expectedCleaningObject = _cleaningObjectResponse;
+            _orderSteps.GetOrdersCleaningObjectById(_orderId, _adminToken, expectedCleaningObject);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
         {
             HttpContent content = _ordersClient.GettAllOrders(token, HttpStatusCode.OK);
             List<OrdersResponseModel> actual = JsonSerializer.Deserialize<List<OrdersResponseModel>>(content.ReadAsStringAsync().Result);
-            Assert.AreEqual(expected, actual);
+            CollectionAssert.AreEquivalent(expected, actual);
             return actual;
         }
         public void DeleteOrderByIdTest(int id, string token)
@@ -46,19 +46,23 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
         {
             HttpContent content = _ordersClient.GetServicesByOrderId(id, token, HttpStatusCode.OK);
             List<ServicesResponseModel> actual = JsonSerializer.Deserialize<List<ServicesResponseModel>>(content.ReadAsStringAsync().Result);
-            Assert.AreEqual(expected, actual);
+            CollectionAssert.AreEquivalent(expected, actual);
             return actual;
         }
-        public List<CleaningObjectResponseModel> GetOrdersCleaningObjectById(int id, string token, List<CleaningObjectResponseModel> expected)
+        public CleaningObjectResponseModel GetOrdersCleaningObjectById(int id, string token, CleaningObjectResponseModel expected)
         {
             HttpContent content = _ordersClient.GetCleaningObjectByOrderId(id, token, HttpStatusCode.OK);
-            List<CleaningObjectResponseModel> actual = JsonSerializer.Deserialize<List<CleaningObjectResponseModel>>(content.ReadAsStringAsync().Result);
+            CleaningObjectResponseModel actual = JsonSerializer.Deserialize<CleaningObjectResponseModel>(content.ReadAsStringAsync().Result);
             Assert.AreEqual(expected, actual);
             return actual;
         }
         public void UpdateStatusByOrderIdTest(int id, int status, string token)
         {
             _ordersClient.ChangeOrdersStatusById(id, status, token, HttpStatusCode.NoContent);
+        }
+        public void UpdatePaymentStatusByOrderIdTest(int id, int paymentStatus, string token)
+        {
+            _ordersClient.ChangeOrdersStatusById(id, paymentStatus, token, HttpStatusCode.NoContent);
         }
     }
 }
