@@ -28,7 +28,7 @@ namespace YogurtAutoTesting.Tests
         private List<BundlesResponseModel> _bundlesResponseModel;
         private List<ServicesResponseModel> _servicesResponseModel;
         private List<CleanerResponseModel> _cleanerResponseModel;
-        private List<CommentsResponseModel> _commentsResponse;
+        private List<CommentsByClientResponseModel> _commentsResponse;
 
         public UpdateOrderByIdTest()
         {
@@ -52,7 +52,7 @@ namespace YogurtAutoTesting.Tests
             _cleanerResponseModel = new List<CleanerResponseModel>();
             _bundlesResponseModel = new List<BundlesResponseModel>();
             _servicesResponseModel = new List<ServicesResponseModel>();
-            _commentsResponse = new List<CommentsResponseModel>();
+            _commentsResponse = new List<CommentsByClientResponseModel>();
         }
 
         [OneTimeSetUp]
@@ -67,7 +67,7 @@ namespace YogurtAutoTesting.Tests
             _deleteFromDb.ClearBase();
         }
         [TestCaseSource(typeof(CreateOrder_WhenModelIsCorrect_TestCaseSource))]
-        public void DeleteOrderById_WhenIdIsCorrect_ShouldDeleteOrder(AuthRequestModel adminAuthModel, ServicesRequestModel servicesRequest,
+        public void UpdateOrderById_WhenIdIsCorrect_ShouldUpdateOrder(AuthRequestModel adminAuthModel, ServicesRequestModel servicesRequest,
             BundlesRequestModel bundlesRequest, CleanerRequestModel cleanerRequest, ClientRequestModel clientModel,
             AuthRequestModel clientAuthModel, CleaningObjectRequestModel cleaningObjectRequest)
         {
@@ -87,6 +87,7 @@ namespace YogurtAutoTesting.Tests
             string clientToken = _authorizationSteps.Authorize(clientAuthModel);
             _clientResponse = _clientMapper.MappClientRequestModelToClientResponseModel(clientModel, clientId, regDate);
 
+            cleaningObjectRequest.ClientId = clientId;
             int cleaningObjectId = _cleaningObjectSteps.AddCleaningObjectTest(cleaningObjectRequest, clientToken);
             _cleaningObjectResponse = _cleaningObjectMapper.MappCleaningObjectRequestModelToCleaningObjectResponseModel(cleaningObjectRequest, clientId, cleaningObjectId);
 

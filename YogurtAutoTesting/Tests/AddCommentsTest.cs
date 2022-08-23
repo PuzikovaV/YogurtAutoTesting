@@ -46,7 +46,7 @@ namespace YogurtAutoTesting.Tests
             _deleteFromDb.ClearBase();
         }
         [TestCaseSource(typeof(CreateOrder_WhenModelIsCorrect_TestCaseSource))]
-        public void DeleteOrderById_WhenIdIsCorrect_ShouldDeleteOrder(AuthRequestModel adminAuthModel, ServicesRequestModel servicesRequest,
+        public void CreateComment_WhenModelIsCorrect_ShouldDeleteOrder(AuthRequestModel adminAuthModel, ServicesRequestModel servicesRequest,
             BundlesRequestModel bundlesRequest, CleanerRequestModel cleanerRequest, ClientRequestModel clientModel,
             AuthRequestModel clientAuthModel, CleaningObjectRequestModel cleaningObjectRequest)
         {
@@ -56,8 +56,15 @@ namespace YogurtAutoTesting.Tests
             int bundleId = _bundlesSteps.CreateBundleTest(bundlesRequest, adminToken);
             cleanerRequest.ServicesIds = new List<int>() { serviceId };
             int cleanerId = _cleanerSteps.CreateCleanerTest(cleanerRequest);
+            AuthRequestModel cleanerAuthModel = new AuthRequestModel()
+            {
+                Email = cleanerRequest.Email,
+                Password = cleanerRequest.Password
+            };
+            string cleanerToken = _authorizationSteps.Authorize(cleanerAuthModel);
             int clientId = _authorizationSteps.RegisterClient(clientModel);
             string clientToken = _authorizationSteps.Authorize(clientAuthModel);
+            cleaningObjectRequest.ClientId = clientId;
             int cleaningObjectId = _cleaningObjectSteps.AddCleaningObjectTest(cleaningObjectRequest, clientToken);
             OrderRequestModel orderRequest = new OrderRequestModel()
             {
@@ -75,12 +82,25 @@ namespace YogurtAutoTesting.Tests
                 OrderId = orderId,
                 Rating = 5
             };
-            int commentId = _commentsSteps.AddCommentByClientTest(commentClientRequest, clientToken);
+            int clientCommentId = _commentsSteps.AddCommentByClientTest(commentClientRequest, clientToken);
 
-            List<CommentsResponseModel> expectedCommentsResponse = new List<CommentsResponseModel>;
-            expectedCommentsResponse.Add(_commentsMapper.MappCommentsRequestModelToCommentsResponseModel(commentClientRequest, commentId, cleanerId, clientId));
-            _clientsSteps.GetCommentsByClientIdTest(clientId, adminToken, expectedCommentsResponse);
+            List<CommentsByClientResponseModel> expectedClientCommentsResponse = new List<CommentsByClientResponseModel>();
+            expectedClientCommentsResponse.Add(_commentsMapper.MappCommentsRequestModelToCommentsResponseModelForClient(commentClientRequest, clientCommentId, clientId));
+            _clientsSteps.GetCommentsByClientIdTest(clientId, adminToken, expectedClientCommentsResponse);
 
+            CommentsRequestModel commentsCleanerRequest = new CommentsRequestModel()
+            {
+                Summary = "Покусала собака",
+                OrderId = orderId,
+                Rating = 3
+            };
+            int cleanerCommentId = _commentsSteps.AddCommentByCleanerTest(commentsCleanerRequest, cleanerToken);
+            List<CommentsByCleanerResponseModel> expectedCleanerCommentsResponse = new List<CommentsByCleanerResponseModel>();
+            expectedCleanerCommentsResponse.Add(_commentsMapper.MappCommentsRequestModelToCommentsResponseModelForCleaner(commentsCleanerRequest, cleanerCommentId, cleanerId));
+            _cleanerSteps.GetCommentsByCleanerIdTest(cleanerId, adminToken, expectedCleanerCommentsResponse);
+
+            _clientsSteps.GetAllCommentsAboutClientByClientId(clientId, adminToken, expectedCleanerCommentsResponse);
+            _cleanerSteps.GetAllCommentsAboutCleanerByCleanerId(cleanerId, adminToken, expectedClientCommentsResponse);
         }
     }
 }

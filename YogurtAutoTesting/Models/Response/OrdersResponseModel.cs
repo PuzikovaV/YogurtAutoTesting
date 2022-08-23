@@ -26,7 +26,7 @@ namespace YogurtAutoTesting.Models.Response
         public DateTime UpdateTime { get; set; }
 
         [JsonPropertyName("price")]
-        public int Price { get; set; }
+        public double Price { get; set; }
 
         [JsonPropertyName("bundles")]
         public List<BundlesResponseModel> Bundles { get; set; }
@@ -36,9 +36,6 @@ namespace YogurtAutoTesting.Models.Response
 
         [JsonPropertyName("cleanersBand")]
         public List<CleanerResponseModel> CleanersBand { get; set; }
-
-        [JsonPropertyName("comments")]
-        public List<CommentsResponseModel> Comments { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -91,19 +88,6 @@ namespace YogurtAutoTesting.Models.Response
             for (int i = 0; i < cleanersBand.Count; i++)
             {
                 if (!cleanersBand[i].Equals(this.CleanersBand[i]))
-                {
-                    return false;
-                }
-            }
-
-            List<CommentsResponseModel> comments = ((OrdersResponseModel)obj).Comments;
-            if (comments.Count != this.Comments.Count)
-            {
-                return false;
-            }
-            for (int i = 0; i < comments.Count; i++)
-            {
-                if (!comments[i].Equals(this.Comments[i]))
                 {
                     return false;
                 }

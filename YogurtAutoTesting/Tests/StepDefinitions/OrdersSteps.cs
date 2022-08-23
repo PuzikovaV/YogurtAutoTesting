@@ -20,6 +20,12 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             Assert.IsTrue(id > 0);
             return id;
         }
+        public DateTime GetUpdateTimeOrder(int id, string token)
+        {
+            HttpContent content = _ordersClient.GetOrderByOrderId(id, token, HttpStatusCode.OK);
+            OrdersResponseModel actual = JsonSerializer.Deserialize<OrdersResponseModel>(content.ReadAsStringAsync().Result);
+            return actual.UpdateTime;
+        }
         public OrdersResponseModel GetOrderByIdTest(int id, string token, OrdersResponseModel expected)
         {
             HttpContent content = _ordersClient.GetOrderByOrderId(id, token, HttpStatusCode.OK);

@@ -51,6 +51,7 @@ namespace YogurtAutoTesting.Tests
             _cleanerSteps.CreateCleanerTest(cleanerRequest);
             int clientId = _authorizationSteps.RegisterClient(clientModel);
             string clientToken = _authorizationSteps.Authorize(clientAuthModel);
+            cleaningObjectRequest.ClientId = clientId;
             int cleaningObjectId = _cleaningObjectSteps.AddCleaningObjectTest(cleaningObjectRequest, clientToken);
             OrderRequestModel orderRequest = new OrderRequestModel()
             {
@@ -61,7 +62,7 @@ namespace YogurtAutoTesting.Tests
                 StartTime = new DateTime (2022,09,09,13,00,00)
             };
             int orderId = _orderSteps.CreateOrderTest(orderRequest, clientToken);
-            _orderSteps.DeleteOrderByIdTest(orderId, clientToken);
+            _orderSteps.DeleteOrderByIdTest(orderId, adminToken);
             List<OrdersResponseModel> expected = new List<OrdersResponseModel>();
             _orderSteps.GetAllOrdersTest(adminToken, expected);
         }

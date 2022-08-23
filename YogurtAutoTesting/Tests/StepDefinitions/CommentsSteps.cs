@@ -17,7 +17,7 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
 
         public int AddCommentByClientTest(CommentsRequestModel model, string token)
         {
-            HttpContent content = _commentsClient.AddCommentByClient(model, token, HttpStatusCode.OK);
+            HttpContent content = _commentsClient.AddCommentByClient(model, token, HttpStatusCode.Created);
             int id = Convert.ToInt32(content.ReadAsStringAsync().Result);
 
             Assert.IsTrue(id > 0);
@@ -27,7 +27,7 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
 
         public int AddCommentByCleanerTest(CommentsRequestModel model, string token)
         {
-            HttpContent content = _commentsClient.AddCommentByCleaner(model, token, HttpStatusCode.OK);
+            HttpContent content = _commentsClient.AddCommentByCleaner(model, token, HttpStatusCode.Created);
             int id = Convert.ToInt32(content.ReadAsStringAsync().Result);
 
             Assert.IsTrue(id > 0);
@@ -40,11 +40,11 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             _commentsClient.DeleteCommentById(id, token, HttpStatusCode.NoContent);
         }
 
-        public List<CommentsResponseModel> GetAllCommentsByAdminTest(string token, List<CommentsResponseModel> expected)
+        public List<CommentsByClientResponseModel> GetAllCommentsByAdminTest(string token, List<CommentsByClientResponseModel> expected)
         {
             HttpContent httpContent = _commentsClient.GetAllComments(token, HttpStatusCode.OK);
             string content = httpContent.ReadAsStringAsync().Result;
-            List<CommentsResponseModel> actual = JsonSerializer.Deserialize<List<CommentsResponseModel>>(content);
+            List<CommentsByClientResponseModel> actual = JsonSerializer.Deserialize<List<CommentsByClientResponseModel>>(content);
             CollectionAssert.AreEquivalent(expected, actual);
             return actual;
         }

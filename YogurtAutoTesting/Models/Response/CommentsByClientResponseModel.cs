@@ -2,7 +2,7 @@
 
 namespace YogurtAutoTesting.Models.Response
 {
-    public class CommentsResponseModel
+    public class CommentsByClientResponseModel
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
@@ -14,7 +14,7 @@ namespace YogurtAutoTesting.Models.Response
         public int ClientId { get; set; }
 
         [JsonPropertyName("cleanerId")]
-        public int CleanerId { get; set; }
+        public string CleanerId { get; set; }
 
         [JsonPropertyName("orderId")]
         public int OrderId { get; set; }
@@ -24,7 +24,7 @@ namespace YogurtAutoTesting.Models.Response
 
         public override bool Equals(object? obj)
         {
-            return obj is CommentsResponseModel model &&
+            return obj is CommentsByClientResponseModel model &&
                 Id == model.Id &&
                 Summary == model.Summary &&
                 ClientId == model.ClientId &&

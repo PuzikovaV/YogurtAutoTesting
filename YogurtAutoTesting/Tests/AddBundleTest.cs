@@ -16,9 +16,9 @@ namespace YogurtAutoTesting.Tests
         private BundleMapper _bundleMapper;
         private ServicesMapper _servicesMapper;
         private List<ServicesResponseModel> _servicesList;
-        int _serviceId;
-        int _bundleId;
-        string _adminToken;
+        private int _serviceId;
+        private int _bundleId;
+        private string _adminToken;
 
         public AddBundleTest()
         {

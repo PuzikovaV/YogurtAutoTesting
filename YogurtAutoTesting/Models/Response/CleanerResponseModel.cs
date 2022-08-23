@@ -49,7 +49,6 @@ namespace YogurtAutoTesting.Models.Response
                     return false;
                 }
             }
-            //CollectionAssert.AreEquivalent(this.Services, ((CleanerResponseModel)obj).Services);
             return obj is CleanerResponseModel model &&
                 Id == model.Id &&
                 FirstName == model.FirstName &&

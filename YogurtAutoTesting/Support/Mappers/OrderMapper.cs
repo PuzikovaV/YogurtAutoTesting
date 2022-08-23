@@ -6,9 +6,9 @@ namespace YogurtAutoTesting.Support.Mappers
 {
     public class OrderMapper
     {
-        public OrdersResponseModel MappOrderRequestModelToOrderResponseModel(OrderRequestModel orderModel, int orderId, ClientResponseModel clientResponse, int price, DateTime endTime,
+        public OrdersResponseModel MappOrderRequestModelToOrderResponseModel(OrderRequestModel orderModel, int orderId, ClientResponseModel clientResponse, double price, DateTime endTime,
             DateTime updateTime, int status, CleaningObjectResponseModel cleaningObjectResponse, List<ServicesResponseModel> serviceResponse, List<BundlesResponseModel> bundleResponse,
-            List<CleanerResponseModel> cleanerResponse, List<CommentsResponseModel> commentsModel)
+            List<CleanerResponseModel> cleanerResponse)
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderRequestModel, OrdersResponseModel>());
             Mapper mapper = new Mapper(config);
@@ -23,13 +23,12 @@ namespace YogurtAutoTesting.Support.Mappers
             responseModel.Bundles = bundleResponse;
             responseModel.Services = serviceResponse;
             responseModel.CleanersBand = cleanerResponse;
-            responseModel.Comments = commentsModel;
             return responseModel;
         }
 
         public OrdersResponseModel MappUpdateOrderRequestModelToOrderResponseModel(UpdateOrderRequestModel orderModel, int orderId, ClientResponseModel clientResponse, int price, DateTime endTime,
             DateTime updateTime, int status, CleaningObjectResponseModel cleaningObjectResponse, List<ServicesResponseModel> serviceResponse, List<BundlesResponseModel> bundleResponse,
-            List<CleanerResponseModel> cleanerResponse, List<CommentsResponseModel> commentsModel)
+            List<CleanerResponseModel> cleanerResponse, List<CommentsByClientResponseModel> commentsModel)
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<UpdateOrderRequestModel, OrdersResponseModel>());
             Mapper mapper = new Mapper(config);
@@ -44,7 +43,6 @@ namespace YogurtAutoTesting.Support.Mappers
             responseModel.Bundles = bundleResponse;
             responseModel.Services = serviceResponse;
             responseModel.CleanersBand = cleanerResponse;
-            responseModel.Comments = commentsModel;
             return responseModel;
         }
     }

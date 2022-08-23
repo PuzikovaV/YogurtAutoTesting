@@ -27,7 +27,6 @@ namespace YogurtAutoTesting.Tests
         private List<BundlesResponseModel> _bundlesResponseModel;
         private List<ServicesResponseModel> _servicesResponseModel;
         private List<CleanerResponseModel> _cleanerResponseModel;
-        private List<CommentsResponseModel> _commentsResponse;
         private int _clientId;
         private int _cleanerId;
         private int _serviceId;
@@ -62,7 +61,6 @@ namespace YogurtAutoTesting.Tests
             _cleanerResponseModel = new List<CleanerResponseModel>();
             _bundlesResponseModel = new List<BundlesResponseModel>();
             _servicesResponseModel = new List<ServicesResponseModel>();
-            _commentsResponse = new List<CommentsResponseModel>();
         }
 
         [OneTimeSetUp]
@@ -82,7 +80,7 @@ namespace YogurtAutoTesting.Tests
                 Price = 300.00,
                 Unit = "Кухня",
                 RoomType = 2,
-                Duration = 15
+                Duration = 0.5
             };
             _serviceId = _serviceSteps.CreateServiceTest(serviceModel, _adminToken);
             _servicesResponseModel.Add(_servicesMapper.MappServiceRequestModelToServiceResponseModel(serviceModel, _serviceId));
@@ -92,7 +90,7 @@ namespace YogurtAutoTesting.Tests
                 Type = 1,
                 RoomType = 2,
                 Price = 3000,
-                Duration = 120,
+                Duration = 2,
                 Measure = 2,
                 ServicesIds = new List<int>()
             };
@@ -111,11 +109,12 @@ namespace YogurtAutoTesting.Tests
                 Phone = "89998887744",
                 Schedule = 1,
                 Districts = new List<int>() { 5, 6, 8 },
-                ServicesIds = new List<int>() { _serviceId}
+                ServicesIds = new List<int>() { }
             };
             _regDate = DateTime.Now.Date;
             _cleanerId = _cleanerSteps.CreateCleanerTest(cleanerModel);
-            _cleanerResponseModel.Add(_cleanerMapper.MappCleanerRequestModelToCleanerResponseModel(cleanerModel, _cleanerId, _regDate, _servicesResponseModel));
+            List<ServicesResponseModel> cleanerServices = new List<ServicesResponseModel>();
+            _cleanerResponseModel.Add(_cleanerMapper.MappCleanerRequestModelToCleanerResponseModel(cleanerModel, _cleanerId, _regDate, cleanerServices));
             _clientModel = new ClientRequestModel()
             {
                 FirstName = "Константин",
@@ -163,15 +162,15 @@ namespace YogurtAutoTesting.Tests
                 CleaningObjectId = _cleaningObjectId,
                 ServicesIds = new List<int> { _serviceId },
                 BundlesIds = new List<int> { _bundleId },
-                StartTime = new DateTime(2022, 10, 11)
+                StartTime = new DateTime(2022, 10, 11, 13, 30, 00)
             };
             _orderId = _orderSteps.CreateOrderTest(orderModel, _clientToken);
-            int price = 500;
-            DateTime endTime = DateTime.Now;
-            DateTime updateTime = new DateTime(0, 0, 0, 0, 0, 0);
+            double price = 3300.00;
+            DateTime endTime = new DateTime(2022, 10, 11, 16, 00, 00);
+            DateTime updateTime = _orderSteps.GetUpdateTimeOrder(_orderId, _adminToken);
             int status = 1;
             OrdersResponseModel expectedModel = _orderMapper.MappOrderRequestModelToOrderResponseModel(orderModel, _orderId, _clientResponse, price, endTime, updateTime, status,
-                _cleaningObjectResponse, _servicesResponseModel, _bundlesResponseModel, _cleanerResponseModel, _commentsResponse);
+                _cleaningObjectResponse, _servicesResponseModel, _bundlesResponseModel, _cleanerResponseModel);
             _orderSteps.GetOrderByIdTest(_orderId, _clientToken, expectedModel);
             List<OrdersResponseModel> expectedList = new List<OrdersResponseModel>()
             {
@@ -184,6 +183,9 @@ namespace YogurtAutoTesting.Tests
 
             CleaningObjectResponseModel expectedCleaningObject = _cleaningObjectResponse;
             _orderSteps.GetOrdersCleaningObjectById(_orderId, _adminToken, expectedCleaningObject);
+
+            _cleanerSteps.GetAllCleanersOrdersByIdTest(_cleanerId, _cleanerToken, expectedList);
+            _clientSteps.GetAllClientOrdersByIdTest(_clientId, _clientToken, expectedList);
         }
     }
 }

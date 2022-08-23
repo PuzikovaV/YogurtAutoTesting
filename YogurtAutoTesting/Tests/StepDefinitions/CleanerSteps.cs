@@ -54,17 +54,17 @@ namespace YogurtAutoTesting.Tests.StepDefinitions
             _cleanerClient.UpdateCleanerById(id, token, model, HttpStatusCode.NoContent);
         }
 
-        public List<CommentsResponseModel> GetAllCommentsAboutCleanerByCleanerId(int id, string token, List<CommentsResponseModel> expected)
+        public List<CommentsByClientResponseModel> GetAllCommentsAboutCleanerByCleanerId(int id, string token, List<CommentsByClientResponseModel> expected)
         {
             HttpContent content = _cleanerClient.GetAllCommentsAboutCleanerByCleanerId(id, token, HttpStatusCode.OK);
-            List<CommentsResponseModel> actual = JsonSerializer.Deserialize<List<CommentsResponseModel>>(content.ReadAsStringAsync().Result);
+            List<CommentsByClientResponseModel> actual = JsonSerializer.Deserialize<List<CommentsByClientResponseModel>>(content.ReadAsStringAsync().Result);
             CollectionAssert.AreEquivalent(expected, actual);
             return actual;
         }
-        public List<CommentsResponseModel> GetCommentsByCleanerIdTest(int id, string token, List<CommentsResponseModel> expected)
+        public List<CommentsByCleanerResponseModel> GetCommentsByCleanerIdTest(int id, string token, List<CommentsByCleanerResponseModel> expected)
         {
             HttpContent content = _cleanerClient.GetAllCommentsByCleanerId(id, token, HttpStatusCode.OK);
-            List<CommentsResponseModel> actual = JsonSerializer.Deserialize<List<CommentsResponseModel>>(content.ReadAsStringAsync().Result);
+            List<CommentsByCleanerResponseModel> actual = JsonSerializer.Deserialize<List<CommentsByCleanerResponseModel>>(content.ReadAsStringAsync().Result);
             CollectionAssert.AreEquivalent(expected, actual);
             return actual;
         }
